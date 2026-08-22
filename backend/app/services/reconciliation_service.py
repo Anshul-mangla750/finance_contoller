@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import traceback
 from dataclasses import asdict
 from typing import Any
 
@@ -9,7 +10,16 @@ from sqlalchemy import delete
 from app.config import get_settings
 from app.data_gen.generator import GeneratedBundle, generate_and_save
 from app.db import get_session, init_db
-from app.models.schemas import AuditLogRecord, BankTxn, Bill, ExceptionRecord, Invoice, LedgerEntry, MatchRecord, ReconciliationRun
+from app.models.schemas import (
+    AuditLogRecord,
+    BankTxn,
+    Bill,
+    ExceptionRecord,
+    Invoice,
+    LedgerEntry,
+    MatchRecord,
+    ReconciliationRun,
+)
 from app.matching.pipeline import ReconciliationPipeline
 from app.services.input_loader import load_bundle_from_directory
 from app.rag.ingest import ingest_reconciliation_state
@@ -34,6 +44,7 @@ def _persist_bundle(session, bundle: GeneratedBundle) -> None:
     session.exec(delete(MatchRecord))
     session.exec(delete(ExceptionRecord))
     session.exec(delete(ReconciliationRun))
+    session.exec(delete(AuditLogRecord))
     session.commit()
 
     session.add_all(BankTxn.model_validate(item) for item in bundle.bank_statement)
@@ -44,18 +55,19 @@ def _persist_bundle(session, bundle: GeneratedBundle) -> None:
 
 
 def _checksum(pipeline_result, source_totals: dict[str, int]) -> dict[str, Any]:
-    checksum = {
-        source: {
-            "total": source_totals.get(source, 0),
-            "matched": len(pipeline_result.matched_source_ids.get(source, set())),
-            "exceptions": sum(1 for item in pipeline_result.exceptions if item["source_type"] == source),
-            "ok": source_totals.get(source, 0)
-            == len(pipeline_result.matched_source_ids.get(source, set()))
-            + sum(1 for item in pipeline_result.exceptions if item["source_type"] == source),
+    checksum: dict[str, Any] = {}
+    for source in ["bank", "ledger", "invoice", "bill"]:
+        total = source_totals.get(source, 0)
+        matched = len(pipeline_result.matched_source_ids.get(source, set()))
+        exceptions = sum(1 for item in pipeline_result.exceptions if item["source_type"] == source)
+        ok = total == matched + exceptions
+        checksum[source] = {
+            "total": total,
+            "matched": matched,
+            "exceptions": exceptions,
+            "ok": ok,
         }
-        for source in ["bank", "ledger", "invoice", "bill"]
-    }
-    checksum["ok"] = all(item["ok"] for item in checksum.values())
+    checksum["ok"] = all(item["ok"] for item in checksum.values() if isinstance(item, dict))
     return checksum
 
 
@@ -157,7 +169,6 @@ def _persist_results(
     session.commit()
 
 
-
 def run_reconciliation_with_bundle(
     bundle: GeneratedBundle,
     seed: int | None = None,
@@ -177,24 +188,32 @@ def run_reconciliation_with_bundle(
         bills=bundle.bills,
     )
     cash_position = _cash_position(bundle.bank_statement)
+
     report = None
     if ground_truth is not None:
-        scorer = AccuracyScorer(ground_truth)
-        report = scorer.score(pipeline_result, pipeline_result.source_totals, cash_position)
+        try:
+            scorer = AccuracyScorer(ground_truth)
+            report = scorer.score(pipeline_result, pipeline_result.source_totals, cash_position)
+        except Exception:
+            report = None
 
     accuracy_payload = _build_accuracy_payload(pipeline_result, pipeline_result.source_totals, cash_position, report)
 
     with get_session() as session:
         _persist_results(session, pipeline_result.run_id, pipeline_result, accuracy_payload, cash_position, seed or settings.seed)
 
-    ingest_reconciliation_state(
-        bundle.bank_statement,
-        bundle.general_ledger,
-        bundle.invoices,
-        bundle.bills,
-        pipeline_result.matches,
-        pipeline_result.exceptions,
-    )
+    # Ingest into RAG index (best-effort)
+    try:
+        ingest_reconciliation_state(
+            bundle.bank_statement,
+            bundle.general_ledger,
+            bundle.invoices,
+            bundle.bills,
+            pipeline_result.matches,
+            pipeline_result.exceptions,
+        )
+    except Exception:
+        pass  # RAG indexing is non-critical
 
     response = {
         "run_id": pipeline_result.run_id,

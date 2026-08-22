@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "ai-finance-controller-backend"
 version = "0.1.0"
 description = "AI Finance Controller backend"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
   "fastapi>=0.115",
   "uvicorn[standard]>=0.30",
@@ -25,6 +25,9 @@ dev = [
   "pytest>=8.2",
   "httpx>=0.27",
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

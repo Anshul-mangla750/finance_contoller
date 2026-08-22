@@ -1,155 +1,100 @@
 import { useState } from "react";
 import type { UploadReconciliationFiles } from "../api";
 
-type Props = {
-  onUpload: (files: UploadReconciliationFiles) => Promise<void>;
-  onRunFromFolder: (inputDir: string) => Promise<void>;
-  busy: boolean;
-};
+type Props = { onUpload: (f: UploadReconciliationFiles) => Promise<void>; onRunFromFolder: (dir: string) => Promise<void>; busy: boolean };
 
 export function ReconciliationIngress({ onUpload, onRunFromFolder, busy }: Props) {
-  const [bankStatement, setBankStatement] = useState<File | null>(null);
-  const [generalLedger, setGeneralLedger] = useState<File | null>(null);
+  const [bank, setBank] = useState<File | null>(null);
+  const [ledger, setLedger] = useState<File | null>(null);
   const [invoices, setInvoices] = useState<File | null>(null);
   const [bills, setBills] = useState<File | null>(null);
-  const [groundTruth, setGroundTruth] = useState<File | null>(null);
-  const [inputDir, setInputDir] = useState("input");
+  const [gt, setGt] = useState<File | null>(null);
+  const [dir, setDir] = useState("input");
   const [status, setStatus] = useState<string | null>(null);
 
-  const canUpload = Boolean(bankStatement && generalLedger && invoices && bills);
+  const canUpload = Boolean(bank && ledger && invoices && bills);
 
-  async function handleUpload() {
-    if (!bankStatement || !generalLedger || !invoices || !bills) {
-      setStatus("Please select bank_statement, general_ledger, invoices, and bills first.");
-      return;
-    }
-    setStatus("Uploading and reconciling...");
-    try {
-      await onUpload({
-        bankStatement,
-        generalLedger,
-        invoices,
-        bills,
-        groundTruth,
-      });
-      setStatus("Uploaded files reconciled successfully.");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Upload failed.");
-    }
+  async function doUpload() {
+    if (!canUpload) { setStatus("Select all 4 required files."); return; }
+    setStatus("Uploading...");
+    try { await onUpload({ bankStatement: bank!, generalLedger: ledger!, invoices: invoices!, bills: bills!, groundTruth: gt }); setStatus("Done!"); }
+    catch (e) { setStatus(e instanceof Error ? e.message : "Failed."); }
   }
 
-  async function handleFolderRun() {
-    setStatus(`Running folder mode from ${inputDir}...`);
-    try {
-      await onRunFromFolder(inputDir.trim() || "input");
-      setStatus("Folder reconciliation completed successfully.");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Folder run failed.");
-    }
+  async function doFolder() {
+    setStatus(`Running from ${dir}...`);
+    try { await onRunFromFolder(dir.trim() || "input"); setStatus("Done!"); }
+    catch (e) { setStatus(e instanceof Error ? e.message : "Failed."); }
   }
+
+  const files = [
+    { key: "bank", label: "Bank Statement", file: bank, set: setBank, required: true },
+    { key: "ledger", label: "General Ledger", file: ledger, set: setLedger, required: true },
+    { key: "invoices", label: "Invoices (AR)", file: invoices, set: setInvoices, required: true },
+    { key: "bills", label: "Bills (AP)", file: bills, set: setBills, required: true },
+    { key: "gt", label: "Ground Truth", file: gt, set: setGt, required: false },
+  ] as const;
 
   return (
-    <div className="panel p-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+    <div className="card p-6">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between mb-5">
         <div>
-          <p className="metric-label">Bring your own data</p>
-          <h2 className="mt-1 text-2xl font-semibold text-ink-950">
-            Upload once or rerun from <code className="mono">input/</code>
-          </h2>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-ink-600">
-            Each file can be JSON or CSV. If you prefer a repeatable local drop folder, place the four source files
-            in <code className="mono">input/</code> and use folder mode instead of multipart uploads.
-          </p>
-        </div>
-        <div className="rounded-full bg-sand-100 px-4 py-2 text-xs font-medium text-ink-600">
-          Supported: JSON and CSV
+          <div className="text-[11px] font-semibold uppercase tracking-wider text-[#64748b]">Data Input</div>
+          <h2 className="mt-1 text-xl font-bold text-[#0f172a]">Upload files or run from folder</h2>
+          <p className="mt-1 text-xs text-[#94a3b8]">JSON or CSV. Place files in <code className="mono bg-[#f1f5f9] px-1 rounded">input/</code> for repeatable runs.</p>
         </div>
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-2">
-        <section className="rounded-3xl border border-sand-200 bg-white p-5">
-          <h3 className="text-lg font-semibold text-ink-950">File upload</h3>
-          <div className="mt-4 grid gap-4">
-            {[
-              ["bank_statement", "Bank statement"],
-              ["general_ledger", "General ledger"],
-              ["invoices", "Invoices"],
-              ["bills", "Bills"],
-              ["ground_truth", "Ground truth (optional)"],
-            ].map(([key, label]) => {
-              const isOptional = key === "ground_truth";
-              const id = `recon-${key}`;
-              return (
-                <label key={key} htmlFor={id} className="grid gap-2">
-                  <span className="text-sm font-medium text-ink-700">
-                    {label}
-                    {isOptional ? " " : ""}
-                    {isOptional ? <span className="text-ink-400">(optional)</span> : null}
-                  </span>
-                  <input
-                    id={id}
-                    type="file"
-                    accept=".json,.csv,application/json,text/csv"
-                    onChange={(event) => {
-                      const file = event.target.files?.[0] ?? null;
-                      if (key === "bank_statement") setBankStatement(file);
-                      if (key === "general_ledger") setGeneralLedger(file);
-                      if (key === "invoices") setInvoices(file);
-                      if (key === "bills") setBills(file);
-                      if (key === "ground_truth") setGroundTruth(file);
-                    }}
-                    disabled={busy}
-                    className="block w-full rounded-2xl border border-sand-200 bg-sand-50 px-4 py-3 text-sm text-ink-700 file:mr-4 file:rounded-full file:border-0 file:bg-ink-950 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-moss-500 disabled:cursor-not-allowed"
-                  />
-                </label>
-              );
-            })}
+      <div className="grid gap-5 lg:grid-cols-2">
+        {/* Upload */}
+        <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-5">
+          <h3 className="text-sm font-bold text-[#0f172a] mb-4">File Upload</h3>
+          <div className="space-y-3">
+            {files.map(({ key, label, file, set, required }) => (
+              <label key={key} className="block">
+                <span className="text-xs font-medium text-[#475569]">
+                  {label}{required ? "" : <span className="text-[#94a3b8]"> (optional)</span>}
+                </span>
+                <input type="file" accept=".json,.csv"
+                  onChange={(e) => set(e.target.files?.[0] ?? null)}
+                  disabled={busy}
+                  className="mt-1 block w-full rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-xs text-[#334155] file:mr-3 file:rounded-lg file:border-0 file:bg-[#0f172a] file:px-3 file:py-1.5 file:text-[10px] file:font-semibold file:text-white hover:file:bg-[#1e293b] disabled:opacity-50"
+                />
+              </label>
+            ))}
           </div>
-          <button
-            type="button"
-            onClick={() => void handleUpload()}
-            disabled={busy || !canUpload}
-            className="mt-5 inline-flex items-center justify-center rounded-full bg-moss-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-moss-400 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {busy ? "Running..." : "Run uploaded files"}
+          <button disabled={busy || !canUpload} onClick={() => void doUpload()}
+            className="btn-accent mt-4 w-full disabled:opacity-50">
+            {busy ? "Running..." : "Run Uploaded Files"}
           </button>
-        </section>
+        </div>
 
-        <section className="rounded-3xl border border-sand-200 bg-white p-5">
-          <h3 className="text-lg font-semibold text-ink-950">Folder mode</h3>
-          <p className="mt-2 text-sm leading-6 text-ink-600">
-            Put <code className="mono">bank_statement</code>, <code className="mono">general_ledger</code>,
-            <code className="mono">invoices</code>, and <code className="mono">bills</code> into one folder as JSON or
-            CSV, then run against that folder without uploading again.
+        {/* Folder */}
+        <div className="rounded-xl border border-[#e2e8f0] bg-[#f8fafc] p-5">
+          <h3 className="text-sm font-bold text-[#0f172a] mb-4">Folder Mode</h3>
+          <p className="text-xs text-[#64748b] leading-5 mb-4">
+            Place <code className="mono bg-white px-1 rounded">bank_statement</code>,{" "}
+            <code className="mono bg-white px-1 rounded">general_ledger</code>,{" "}
+            <code className="mono bg-white px-1 rounded">invoices</code>,{" "}
+            <code className="mono bg-white px-1 rounded">bills</code> in one folder.
           </p>
-          <label className="mt-4 grid gap-2">
-            <span className="text-sm font-medium text-ink-700">Input folder</span>
-            <input
-              type="text"
-              value={inputDir}
-              onChange={(event) => setInputDir(event.target.value)}
-              disabled={busy}
-              className="rounded-2xl border border-sand-200 bg-sand-50 px-4 py-3 text-sm text-ink-700 outline-none transition focus:border-moss-400"
-              placeholder="input"
-            />
+          <label className="block">
+            <span className="text-xs font-medium text-[#475569]">Folder path</span>
+            <input type="text" value={dir} onChange={(e) => setDir(e.target.value)} disabled={busy}
+              className="input mt-1 mono" placeholder="input" />
           </label>
-          <button
-            type="button"
-            onClick={() => void handleFolderRun()}
-            disabled={busy}
-            className="mt-5 inline-flex items-center justify-center rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-moss-500 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {busy ? "Running..." : "Run folder reconciliation"}
+          <button disabled={busy} onClick={() => void doFolder()}
+            className="btn-primary mt-4 w-full disabled:opacity-50">
+            {busy ? "Running..." : "Run Folder Reconciliation"}
           </button>
-          <p className="mt-3 text-xs leading-5 text-ink-500">
-            The backend accepts relative paths like <code className="mono">input</code> or an absolute local path if
-            you want to point at a
-            different drop folder.
-          </p>
-        </section>
+        </div>
       </div>
 
-      {status ? <p className="mt-4 text-sm text-ink-600">{status}</p> : null}
+      {status && (
+        <p className={`mt-4 text-xs font-medium ${status.includes("Fail") || status.includes("error") ? "text-[#dc2626]" : "text-[#64748b]"}`}>
+          {status}
+        </p>
+      )}
     </div>
   );
 }

@@ -36,7 +36,11 @@ app/rag/store.py
 app/scoring/__init__.py
 app/scoring/scorer.py
 app/services/__init__.py
+app/services/input_loader.py
 app/services/reconciliation_service.py
+tests/test_audit_evidence_review.py
+tests/test_folder_mode.py
 tests/test_generator.py
 tests/test_matching_layers.py
 tests/test_scoring.py
+tests/test_upload_endpoint.py

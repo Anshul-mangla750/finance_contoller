@@ -42,9 +42,22 @@ def get_accuracy() -> dict:
 
 
 @router.get("/matches")
-def get_matches(page: int = Query(default=1, ge=1), page_size: int = Query(default=25, ge=1, le=200)) -> dict:
+def get_matches(
+    page: int = Query(default=1, ge=1),
+    page_size: int = Query(default=25, ge=1, le=200),
+    source_type: str | None = None,
+    pair_type: str | None = None,
+) -> dict:
     with get_session() as session:
-        rows = session.exec(select(MatchRecord).order_by(MatchRecord.id)).all()
+        statement = select(MatchRecord).order_by(MatchRecord.id)
+        if source_type:
+            statement = statement.where(
+                (MatchRecord.source_a_type == source_type) | (MatchRecord.source_b_type == source_type)
+            )
+        if pair_type:
+            statement = statement.where(MatchRecord.source_a_type.contains(pair_type))
+        rows = session.exec(statement).all()
+
     start = (page - 1) * page_size
     end = start + page_size
     items = rows[start:end]
@@ -60,6 +73,7 @@ def get_matches(page: int = Query(default=1, ge=1), page_size: int = Query(defau
 def get_exceptions(
     source: str | None = None,
     reason_category: str | None = None,
+    review_status: str | None = None,
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=50, ge=1, le=200),
 ) -> dict:
@@ -69,7 +83,10 @@ def get_exceptions(
             statement = statement.where(ExceptionRecord.source_type == source)
         if reason_category:
             statement = statement.where(ExceptionRecord.reason_category == reason_category)
+        if review_status:
+            statement = statement.where(ExceptionRecord.review_status == review_status)
         rows = session.exec(statement).all()
+
     start = (page - 1) * page_size
     end = start + page_size
     items = rows[start:end]
@@ -83,6 +100,8 @@ def get_exceptions(
 
 @router.get("/latest-run")
 def get_latest_run() -> dict:
+    from app.services.reconciliation_service import get_latest_run_cache
+
     cache = get_latest_run_cache()
     if cache:
         return cache["response"]
@@ -213,58 +232,23 @@ def get_cash_details() -> dict:
         },
         "traceability": {
             "inflows": [
-                {
-                    "txn_id": t.txn_id,
-                    "date": str(t.date),
-                    "amount": t.amount,
-                    "description": t.description,
-                    "running_balance": t.running_balance,
-                    "status": "CONFIRMED_INFLOW",
-                }
+                {"txn_id": t.txn_id, "date": str(t.date), "amount": t.amount, "description": t.description, "running_balance": t.running_balance, "status": "CONFIRMED_INFLOW"}
                 for t in inflows
             ],
             "outflows": [
-                {
-                    "txn_id": t.txn_id,
-                    "date": str(t.date),
-                    "amount": t.amount,
-                    "description": t.description,
-                    "running_balance": t.running_balance,
-                    "status": "CONFIRMED_OUTFLOW",
-                }
+                {"txn_id": t.txn_id, "date": str(t.date), "amount": t.amount, "description": t.description, "running_balance": t.running_balance, "status": "CONFIRMED_OUTFLOW"}
                 for t in outflows
             ],
             "unreconciled": [
-                {
-                    "txn_id": t.txn_id,
-                    "date": str(t.date),
-                    "amount": t.amount,
-                    "description": t.description,
-                    "running_balance": t.running_balance,
-                    "status": "UNRECONCILED",
-                }
+                {"txn_id": t.txn_id, "date": str(t.date), "amount": t.amount, "description": t.description, "running_balance": t.running_balance, "status": "UNRECONCILED"}
                 for t in unreconciled_txns
             ],
             "pending_invoices": [
-                {
-                    "invoice_id": inv.invoice_id,
-                    "customer": inv.customer,
-                    "amount": inv.amount,
-                    "issue_date": str(inv.issue_date),
-                    "due_date": str(inv.due_date),
-                    "status": "PENDING_INCOMING",
-                }
+                {"invoice_id": inv.invoice_id, "customer": inv.customer, "amount": inv.amount, "issue_date": str(inv.issue_date), "due_date": str(inv.due_date), "status": "PENDING_INCOMING"}
                 for inv in pending_invoices
             ],
             "pending_bills": [
-                {
-                    "bill_id": b.bill_id,
-                    "vendor": b.vendor,
-                    "amount": b.amount,
-                    "issue_date": str(b.issue_date),
-                    "due_date": str(b.due_date),
-                    "status": "PENDING_OUTGOING",
-                }
+                {"bill_id": b.bill_id, "vendor": b.vendor, "amount": b.amount, "issue_date": str(b.issue_date), "due_date": str(b.due_date), "status": "PENDING_OUTGOING"}
                 for b in pending_bills
             ],
         },
@@ -279,6 +263,3 @@ def get_audit_logs(limit: int = Query(default=50, ge=1, le=200)) -> dict:
         "total": len(logs),
         "items": [log.model_dump() for log in logs],
     }
-
-from app.services.reconciliation_service import get_latest_run_cache
-

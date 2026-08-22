@@ -378,8 +378,8 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
     ]
     # Only the first 49 ledgers are intentionally linked to AR/AP documents.
     matched_ledger_records = matched_ledger_records[:49]
-    invoice_ledgers = matched_ledger_records[:25]
-    bill_ledgers = matched_ledger_records[25:49]
+    invoice_ledgers = matched_ledger_records[:15]
+    bill_ledgers = matched_ledger_records[15:27]
 
     for idx, ledger in enumerate(invoice_ledgers, start=1):
         invoice_id = next_invoice_id()
@@ -426,7 +426,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         add_truth(bill_id, "bill", "clean_match", [{"source_type": "ledger", "record_id": ledger["entry_id"]}])
 
     # Fill the remaining invoices and bills with legitimate orphans.
-    while len(invoices) < 60:
+    while len(invoices) < 20:
         invoice_id = next_invoice_id()
         issue_date = base_date + timedelta(days=180 + len(invoices))
         due_date = issue_date + timedelta(days=30)
@@ -443,7 +443,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         )
         add_truth(invoice_id, "invoice", "orphan_ledger", [])
 
-    while len(bills) < 60:
+    while len(bills) < 20:
         bill_id = next_bill_id()
         issue_date = base_date + timedelta(days=180 + len(bills))
         due_date = issue_date + timedelta(days=30)

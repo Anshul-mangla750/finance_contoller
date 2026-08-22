@@ -1,5 +1,7 @@
-from datetime import datetime
+from __future__ import annotations
+
 import json
+from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
@@ -18,6 +20,7 @@ router = APIRouter(prefix="/api/reconcile", tags=["reconcile"])
 
 @router.post("/run")
 def run_reconciliation() -> dict:
+    """Run a full reconciliation on generated synthetic data."""
     return run_full_reconciliation()
 
 
@@ -47,15 +50,11 @@ async def upload_reconciliation(
     bills: UploadFile = File(...),
     ground_truth: UploadFile | None = File(default=None),
 ) -> dict:
-    bank_filename = bank_statement.filename or "bank_statement.json"
-    ledger_filename = general_ledger.filename or "general_ledger.json"
-    invoice_filename = invoices.filename or "invoices.json"
-    bill_filename = bills.filename or "bills.json"
-
-    bank_payload = _load_records(await bank_statement.read(), bank_filename)
-    ledger_payload = _load_records(await general_ledger.read(), ledger_filename)
-    invoice_payload = _load_records(await invoices.read(), invoice_filename)
-    bill_payload = _load_records(await bills.read(), bill_filename)
+    """Upload custom data files and run reconciliation."""
+    bank_payload = _load_records(await bank_statement.read(), bank_statement.filename or "bank_statement.json")
+    ledger_payload = _load_records(await general_ledger.read(), general_ledger.filename or "general_ledger.json")
+    invoice_payload = _load_records(await invoices.read(), invoices.filename or "invoices.json")
+    bill_payload = _load_records(await bills.read(), bills.filename or "bills.json")
 
     ground_truth_payload = None
     if ground_truth is not None:
@@ -73,6 +72,7 @@ async def upload_reconciliation(
 
 @router.post("/run-folder")
 def run_reconciliation_from_folder(payload: FolderRunRequest | None = None) -> dict:
+    """Run reconciliation from files in a local folder."""
     input_dir = payload.input_dir if payload else None
     try:
         return run_reconciliation_from_input_dir(input_dir)
@@ -90,6 +90,7 @@ class ReviewRequest(BaseModel):
 
 @router.post("/review")
 def review_exception(payload: ReviewRequest) -> dict:
+    """Approve, reject, or mark an exception as reviewed."""
     with get_session() as session:
         statement = select(ExceptionRecord).where(ExceptionRecord.record_id == payload.record_id)
         if payload.run_id:
@@ -140,6 +141,7 @@ def review_exception(payload: ReviewRequest) -> dict:
 
 @router.get("/evidence/{record_id}")
 def get_record_evidence(record_id: str) -> dict:
+    """Get detailed evidence and AI explanation for a specific record."""
     from app.llm.gemini_client import GeminiClient
     from app.llm.schemas import GroundedExplanation
 
@@ -156,7 +158,7 @@ def get_record_evidence(record_id: str) -> dict:
         if not exc and not match:
             raise HTTPException(status_code=404, detail=f"No record found for ID '{record_id}'.")
 
-        evidence = {}
+        evidence: dict[str, Any] = {}
         status = "UNKNOWN"
         run_id = ""
 
@@ -178,7 +180,7 @@ def get_record_evidence(record_id: str) -> dict:
                     evidence = {}
 
         client = GeminiClient()
-        ai_available = client._client is not None
+        ai_available = client.is_online
         gemini_explanation = None
 
         payload = {
@@ -210,4 +212,3 @@ def get_record_evidence(record_id: str) -> dict:
             "ai_explanation": gemini_explanation,
             "record_details": exc.model_dump() if exc else (match.model_dump() if match else {}),
         }
-

@@ -1,4 +1,4 @@
-import type { QAResponse, ReconcileResponse } from "./types";
+import type { ErrorExplanationResponse, QAResponse, ReconcileResponse } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -59,7 +59,7 @@ async function requestMultipart<T>(input: RequestInfo | URL, formData: FormData)
     const preview = text.slice(0, 200).replace(/\s+/g, " ").trim();
     throw new Error(
       `Expected JSON from the API, but got ${contentType || "unknown content type"}. ` +
-        `Check that the backend is running and that VITE_API_BASE_URL is correct. ` +
+        `Check that the backend route is responding correctly. ` +
         (preview ? `Response preview: ${preview}` : ""),
     );
   }
@@ -114,5 +114,21 @@ export function askAgent(question: string): Promise<QAResponse> {
   return requestJson<QAResponse>(apiUrl("/api/qa/ask"), {
     method: "POST",
     body: JSON.stringify({ question }),
+  });
+}
+
+export function fetchErrorExplanation(recordId: string): Promise<ErrorExplanationResponse> {
+  return requestJson<ErrorExplanationResponse>(apiUrl(`/api/reconcile/evidence/${encodeURIComponent(recordId)}`));
+}
+
+export function reviewException(payload: {
+  record_id: string;
+  action: string;
+  notes?: string;
+  reviewer_name?: string;
+}): Promise<{ success: boolean; record: Record<string, unknown> }> {
+  return requestJson<{ success: boolean; record: Record<string, unknown> }>(apiUrl("/api/reconcile/review"), {
+    method: "POST",
+    body: JSON.stringify(payload),
   });
 }

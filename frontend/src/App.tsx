@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { loadLatestRun, runFolderReconciliation, runReconciliation, uploadReconciliation } from "./api";
 import { ReconciliationIngress } from "./components/ReconciliationIngress";
+import { Sidebar } from "./components/Sidebar";
 import { AskAgentPage } from "./pages/AskAgent";
+import { ErrorsPage } from "./pages/Errors";
 import { MatchesPage } from "./pages/Matches";
 import { OverviewPage } from "./pages/Overview";
-import type { ExceptionRow, MatchRow, ReconcileResponse } from "./types";
+import type { ReconcileResponse } from "./types";
 
-type View = "overview" | "matches" | "ask";
+type View = "overview" | "matches" | "errors" | "ask";
 
 export default function App() {
   const [view, setView] = useState<View>("overview");
@@ -53,7 +55,7 @@ export default function App() {
       setFocusedRecordId(null);
       setView("overview");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload reconciliation failed.");
+      setError(err instanceof Error ? err.message : "Upload failed.");
       throw err;
     } finally {
       setRunning(false);
@@ -69,7 +71,7 @@ export default function App() {
       setFocusedRecordId(null);
       setView("overview");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Folder reconciliation failed.");
+      setError(err instanceof Error ? err.message : "Folder run failed.");
       throw err;
     } finally {
       setRunning(false);
@@ -78,101 +80,136 @@ export default function App() {
 
   function handleFocusRecord(recordId: string) {
     setFocusedRecordId(recordId);
-    const inExceptions = data?.exceptions.some((row) => row.record_id === recordId) ?? false;
-    setView(inExceptions ? "matches" : "matches");
+    if (data?.exceptions.some((row) => row.record_id === recordId)) {
+      setView("errors");
+    } else {
+      setView("matches");
+    }
   }
 
   const matches = data?.matches ?? [];
   const exceptions = data?.exceptions ?? [];
 
   return (
-    <div className="min-h-screen px-4 py-6 text-ink-900 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <header className="panel-soft relative mb-6 overflow-hidden p-6">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(90,164,105,0.18),transparent_26%),radial-gradient(circle_at_bottom_left,rgba(217,119,6,0.14),transparent_30%)]" />
-          <div className="relative flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="min-h-screen bg-[#f1f5f9]">
+      <Sidebar
+        currentView={view}
+        onNavigate={setView}
+        exceptionCount={data?.kpis.exception_count ?? 0}
+        isRunning={running}
+      />
+
+      <main className="main-content">
+        {/* Top Bar */}
+        <div className="sticky top-0 z-40 bg-[#f1f5f9]/80 backdrop-blur-xl border-b border-[#e2e8f0]">
+          <div className="flex items-center justify-between px-6 lg:px-8 py-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.3em] text-moss-500">AI Finance Controller</p>
-              <h1 className="mt-2 text-4xl font-bold tracking-tight text-ink-950 sm:text-5xl">
-                Live reconciliation with measurable truth.
+              <h1 className="text-lg font-bold text-[#0f172a]">
+                {view === "overview" && "Dashboard Overview"}
+                {view === "matches" && "Matches & Exceptions"}
+                {view === "errors" && "Error Analysis"}
+                {view === "ask" && "AI Agent"}
               </h1>
-              <p className="mt-3 max-w-3xl text-sm leading-6 text-ink-600 sm:text-base">
-                Every batch runs end-to-end on the synthetic datasets, computes precision/recall against hidden truth,
-                and surfaces unresolved cases in a visible exception list.
+              <p className="text-xs text-[#64748b] mt-0.5">
+                {view === "overview" && "KPIs, accuracy metrics, and reconciliation summary"}
+                {view === "matches" && "Matched records and exception list with audit trail"}
+                {view === "errors" && "What went wrong, where, and why — per exception"}
+                {view === "ask" && "Grounded Q&A over reconciliation data"}
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => void handleRun()}
-              disabled={running}
-              className="inline-flex items-center justify-center rounded-full bg-ink-950 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-moss-500 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {running ? "Running batch..." : "Run Reconciliation"}
-            </button>
-          </div>
-        </header>
-
-        <nav className="mb-6 flex flex-wrap gap-2">
-          {[
-            ["overview", "Overview"],
-            ["matches", "Matches & Exceptions"],
-            ["ask", "Ask the Agent"],
-          ].map(([key, label]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setView(key as View)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                view === key ? "bg-ink-950 text-white shadow-md" : "bg-white/80 text-ink-700 hover:bg-white"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-          {error ? <span className="ml-auto rounded-full bg-red-50 px-4 py-2 text-sm text-red-700">{error}</span> : null}
-        </nav>
-
-        {loading ? (
-          <div className="panel p-10 text-center text-ink-600">Loading latest reconciliation run...</div>
-        ) : null}
-
-        {!loading && data ? (
-          <>
-            {view === "overview" ? (
-              <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
-            ) : null}
-            {view === "overview" ? (
-              <OverviewPage
-                kpis={data.kpis}
-                accuracy={data.accuracy}
-                onRun={handleRun}
-                running={running}
-              />
-            ) : null}
-            {view === "matches" ? (
-              <MatchesPage
-                matches={matches}
-                exceptions={exceptions}
-                focusedRecordId={focusedRecordId}
-                onFocusRecord={handleFocusRecord}
-              />
-            ) : null}
-            {view === "ask" ? (
-              <AskAgentPage onFocusRecord={handleFocusRecord} />
-            ) : null}
-          </>
-        ) : null}
-
-        {!loading && !data ? (
-          <div className="space-y-6">
-            <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
-            <div className="panel p-8 text-ink-700">
-              No reconciliation run is available yet. Use <span className="font-semibold">Run Reconciliation</span> to
-              generate the synthetic batch and metrics, or upload your own files above.
+            <div className="flex items-center gap-3">
+              {error && (
+                <span className="badge badge-red max-w-[300px] truncate">{error}</span>
+              )}
+              <button
+                type="button"
+                onClick={() => void handleRun()}
+                disabled={running}
+                className="btn-primary"
+              >
+                {running ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Running...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+                    </svg>
+                    Run Reconciliation
+                  </>
+                )}
+              </button>
             </div>
           </div>
-        ) : null}
-      </div>
+        </div>
+
+        {/* Content */}
+        <div className="content-area">
+          {loading && (
+            <div className="card p-12 text-center">
+              <div className="inline-flex items-center gap-3 text-[#64748b]">
+                <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                Loading latest reconciliation run...
+              </div>
+            </div>
+          )}
+
+          {!loading && !data && (
+            <div className="space-y-6 animate-fadeIn">
+              <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
+              <div className="card p-8">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-[#f1f5f9] flex items-center justify-center shrink-0">
+                    <svg className="w-5 h-5 text-[#64748b]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#0f172a]">No reconciliation data yet</h3>
+                    <p className="mt-1 text-sm text-[#64748b]">
+                      Click <strong>Run Reconciliation</strong> to generate synthetic data and process the full batch,
+                      or upload your own files above.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {!loading && data && (
+            <div className="animate-fadeIn">
+              {view === "overview" && (
+                <div className="space-y-6">
+                  <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
+                  <OverviewPage kpis={data.kpis} accuracy={data.accuracy} onRun={handleRun} running={running} />
+                </div>
+              )}
+              {view === "matches" && (
+                <MatchesPage
+                  matches={matches}
+                  exceptions={exceptions}
+                  focusedRecordId={focusedRecordId}
+                  onFocusRecord={handleFocusRecord}
+                />
+              )}
+              {view === "errors" && (
+                <ErrorsPage exceptions={exceptions} onFocusRecord={handleFocusRecord} />
+              )}
+              {view === "ask" && (
+                <AskAgentPage onFocusRecord={handleFocusRecord} />
+              )}
+            </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
