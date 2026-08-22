@@ -1,0 +1,3045 @@
+{
+  "cases": [
+    {
+      "case_id": "case-001",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0001"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0001"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-002",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0002"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0002"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-003",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0003"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0003"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-004",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0004"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0004"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-005",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0005"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0005"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-006",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0006"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0006"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-007",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0007"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0007"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-008",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0008"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0008"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-009",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0009"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0009"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-010",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0010"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0010"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-011",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0011"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0011"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-012",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0012"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0012"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-013",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0013"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0013"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-014",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0014"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0014"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-015",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0015"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0015"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-016",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0016"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0016"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-017",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0017"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0017"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-018",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0018"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0018"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-019",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0019"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0019"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-020",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0020"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0020"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-021",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0021"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0021"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-022",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0022"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0022"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-023",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0023"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0023"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-024",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0024"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0024"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-025",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0025"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0025"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-026",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0026"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0026"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-027",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0027"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0027"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-028",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0028"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0028"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-029",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0029"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0029"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-030",
+      "category": "clean_match",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0030"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0030"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-031",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0031"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0031"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-032",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0032"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0032"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-033",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0033"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0033"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-034",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0034"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0034"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-035",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0035"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0035"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-036",
+      "category": "fee_mismatch",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0036"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0036"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-037",
+      "category": "date_shift",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0037"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0037"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-038",
+      "category": "date_shift",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0038"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0038"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-039",
+      "category": "date_shift",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0039"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0039"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-040",
+      "category": "date_shift",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0040"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0040"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-041",
+      "category": "date_shift",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0041"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0041"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-042",
+      "category": "fuzzy_desc",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0042"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0042"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-043",
+      "category": "fuzzy_desc",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0043"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0043"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-044",
+      "category": "fuzzy_desc",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0044"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0044"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-045",
+      "category": "fuzzy_desc",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0045"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0045"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-046",
+      "category": "fuzzy_desc",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0046"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0046"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-split-01",
+      "category": "split_payment",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0047",
+        "BANK-0048"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0047"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-split-02",
+      "category": "split_payment",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0049",
+        "BANK-0050"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0048"
+      ],
+      "source_b_type": "ledger"
+    },
+    {
+      "case_id": "case-split-03",
+      "category": "split_payment",
+      "pair_type": "bank_ledger",
+      "source_a_ids": [
+        "BANK-0051",
+        "BANK-0052"
+      ],
+      "source_a_type": "bank",
+      "source_b_ids": [
+        "LED-0049"
+      ],
+      "source_b_type": "ledger"
+    }
+  ],
+  "record_truth": {
+    "bank:BANK-0001": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0001",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0001",
+      "source_type": "bank"
+    },
+    "bank:BANK-0002": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0002",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0002",
+      "source_type": "bank"
+    },
+    "bank:BANK-0003": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0003",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0003",
+      "source_type": "bank"
+    },
+    "bank:BANK-0004": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0004",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0004",
+      "source_type": "bank"
+    },
+    "bank:BANK-0005": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0005",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0005",
+      "source_type": "bank"
+    },
+    "bank:BANK-0006": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0006",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0006",
+      "source_type": "bank"
+    },
+    "bank:BANK-0007": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0007",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0007",
+      "source_type": "bank"
+    },
+    "bank:BANK-0008": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0008",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0008",
+      "source_type": "bank"
+    },
+    "bank:BANK-0009": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0009",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0009",
+      "source_type": "bank"
+    },
+    "bank:BANK-0010": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0010",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0010",
+      "source_type": "bank"
+    },
+    "bank:BANK-0011": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0011",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0011",
+      "source_type": "bank"
+    },
+    "bank:BANK-0012": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0012",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0012",
+      "source_type": "bank"
+    },
+    "bank:BANK-0013": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0013",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0013",
+      "source_type": "bank"
+    },
+    "bank:BANK-0014": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0014",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0014",
+      "source_type": "bank"
+    },
+    "bank:BANK-0015": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0015",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0015",
+      "source_type": "bank"
+    },
+    "bank:BANK-0016": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0016",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0016",
+      "source_type": "bank"
+    },
+    "bank:BANK-0017": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0017",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0017",
+      "source_type": "bank"
+    },
+    "bank:BANK-0018": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0018",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0018",
+      "source_type": "bank"
+    },
+    "bank:BANK-0019": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0019",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0019",
+      "source_type": "bank"
+    },
+    "bank:BANK-0020": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0020",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0020",
+      "source_type": "bank"
+    },
+    "bank:BANK-0021": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0021",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0021",
+      "source_type": "bank"
+    },
+    "bank:BANK-0022": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0022",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0022",
+      "source_type": "bank"
+    },
+    "bank:BANK-0023": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0023",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0023",
+      "source_type": "bank"
+    },
+    "bank:BANK-0024": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0024",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0024",
+      "source_type": "bank"
+    },
+    "bank:BANK-0025": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0025",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0025",
+      "source_type": "bank"
+    },
+    "bank:BANK-0026": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0026",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0026",
+      "source_type": "bank"
+    },
+    "bank:BANK-0027": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0027",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0027",
+      "source_type": "bank"
+    },
+    "bank:BANK-0028": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0028",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0028",
+      "source_type": "bank"
+    },
+    "bank:BANK-0029": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0029",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0029",
+      "source_type": "bank"
+    },
+    "bank:BANK-0030": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0030",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0030",
+      "source_type": "bank"
+    },
+    "bank:BANK-0031": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0031",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0031",
+      "source_type": "bank"
+    },
+    "bank:BANK-0032": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0032",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0032",
+      "source_type": "bank"
+    },
+    "bank:BANK-0033": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0033",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0033",
+      "source_type": "bank"
+    },
+    "bank:BANK-0034": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0034",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0034",
+      "source_type": "bank"
+    },
+    "bank:BANK-0035": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0035",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0035",
+      "source_type": "bank"
+    },
+    "bank:BANK-0036": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "LED-0036",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0036",
+      "source_type": "bank"
+    },
+    "bank:BANK-0037": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "LED-0037",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0037",
+      "source_type": "bank"
+    },
+    "bank:BANK-0038": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "LED-0038",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0038",
+      "source_type": "bank"
+    },
+    "bank:BANK-0039": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "LED-0039",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0039",
+      "source_type": "bank"
+    },
+    "bank:BANK-0040": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "LED-0040",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0040",
+      "source_type": "bank"
+    },
+    "bank:BANK-0041": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "LED-0041",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0041",
+      "source_type": "bank"
+    },
+    "bank:BANK-0042": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "LED-0042",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0042",
+      "source_type": "bank"
+    },
+    "bank:BANK-0043": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "LED-0043",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0043",
+      "source_type": "bank"
+    },
+    "bank:BANK-0044": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "LED-0044",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0044",
+      "source_type": "bank"
+    },
+    "bank:BANK-0045": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "LED-0045",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0045",
+      "source_type": "bank"
+    },
+    "bank:BANK-0046": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "LED-0046",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0046",
+      "source_type": "bank"
+    },
+    "bank:BANK-0047": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0047",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0047",
+      "source_type": "bank"
+    },
+    "bank:BANK-0048": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0047",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0048",
+      "source_type": "bank"
+    },
+    "bank:BANK-0049": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0048",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0049",
+      "source_type": "bank"
+    },
+    "bank:BANK-0050": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0048",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0050",
+      "source_type": "bank"
+    },
+    "bank:BANK-0051": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0049",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0051",
+      "source_type": "bank"
+    },
+    "bank:BANK-0052": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "LED-0049",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BANK-0052",
+      "source_type": "bank"
+    },
+    "bank:BANK-0053": {
+      "category": "orphan_bank",
+      "counterparts": [],
+      "record_id": "BANK-0053",
+      "source_type": "bank"
+    },
+    "bank:BANK-0054": {
+      "category": "orphan_bank",
+      "counterparts": [],
+      "record_id": "BANK-0054",
+      "source_type": "bank"
+    },
+    "bank:BANK-0055": {
+      "category": "orphan_bank",
+      "counterparts": [],
+      "record_id": "BANK-0055",
+      "source_type": "bank"
+    },
+    "bank:BANK-0056": {
+      "category": "orphan_bank",
+      "counterparts": [],
+      "record_id": "BANK-0056",
+      "source_type": "bank"
+    },
+    "bank:BANK-0057": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "BANK-0057",
+      "source_type": "bank"
+    },
+    "bank:BANK-0058": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "BANK-0058",
+      "source_type": "bank"
+    },
+    "bank:BANK-0059": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "BANK-0059",
+      "source_type": "bank"
+    },
+    "bank:BANK-0060": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "BANK-0060",
+      "source_type": "bank"
+    },
+    "bill:BILL-0001": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0026",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0001",
+      "source_type": "bill"
+    },
+    "bill:BILL-0002": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0027",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0002",
+      "source_type": "bill"
+    },
+    "bill:BILL-0003": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0028",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0003",
+      "source_type": "bill"
+    },
+    "bill:BILL-0004": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0029",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0004",
+      "source_type": "bill"
+    },
+    "bill:BILL-0005": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0030",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0005",
+      "source_type": "bill"
+    },
+    "bill:BILL-0006": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0031",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0006",
+      "source_type": "bill"
+    },
+    "bill:BILL-0007": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0032",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0007",
+      "source_type": "bill"
+    },
+    "bill:BILL-0008": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0033",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0008",
+      "source_type": "bill"
+    },
+    "bill:BILL-0009": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0034",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0009",
+      "source_type": "bill"
+    },
+    "bill:BILL-0010": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0035",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0010",
+      "source_type": "bill"
+    },
+    "bill:BILL-0011": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0036",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0011",
+      "source_type": "bill"
+    },
+    "bill:BILL-0012": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0037",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0012",
+      "source_type": "bill"
+    },
+    "bill:BILL-0013": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0038",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0013",
+      "source_type": "bill"
+    },
+    "bill:BILL-0014": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0039",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0014",
+      "source_type": "bill"
+    },
+    "bill:BILL-0015": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0040",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0015",
+      "source_type": "bill"
+    },
+    "bill:BILL-0016": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0041",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0016",
+      "source_type": "bill"
+    },
+    "bill:BILL-0017": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0042",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0017",
+      "source_type": "bill"
+    },
+    "bill:BILL-0018": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0043",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0018",
+      "source_type": "bill"
+    },
+    "bill:BILL-0019": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0044",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0019",
+      "source_type": "bill"
+    },
+    "bill:BILL-0020": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0045",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0020",
+      "source_type": "bill"
+    },
+    "bill:BILL-0021": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0046",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0021",
+      "source_type": "bill"
+    },
+    "bill:BILL-0022": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0047",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0022",
+      "source_type": "bill"
+    },
+    "bill:BILL-0023": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0048",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0023",
+      "source_type": "bill"
+    },
+    "bill:BILL-0024": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0049",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "BILL-0024",
+      "source_type": "bill"
+    },
+    "bill:BILL-0025": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0025",
+      "source_type": "bill"
+    },
+    "bill:BILL-0026": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0026",
+      "source_type": "bill"
+    },
+    "bill:BILL-0027": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0027",
+      "source_type": "bill"
+    },
+    "bill:BILL-0028": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0028",
+      "source_type": "bill"
+    },
+    "bill:BILL-0029": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0029",
+      "source_type": "bill"
+    },
+    "bill:BILL-0030": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0030",
+      "source_type": "bill"
+    },
+    "bill:BILL-0031": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0031",
+      "source_type": "bill"
+    },
+    "bill:BILL-0032": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0032",
+      "source_type": "bill"
+    },
+    "bill:BILL-0033": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0033",
+      "source_type": "bill"
+    },
+    "bill:BILL-0034": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0034",
+      "source_type": "bill"
+    },
+    "bill:BILL-0035": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0035",
+      "source_type": "bill"
+    },
+    "bill:BILL-0036": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0036",
+      "source_type": "bill"
+    },
+    "bill:BILL-0037": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0037",
+      "source_type": "bill"
+    },
+    "bill:BILL-0038": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0038",
+      "source_type": "bill"
+    },
+    "bill:BILL-0039": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0039",
+      "source_type": "bill"
+    },
+    "bill:BILL-0040": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0040",
+      "source_type": "bill"
+    },
+    "bill:BILL-0041": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0041",
+      "source_type": "bill"
+    },
+    "bill:BILL-0042": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0042",
+      "source_type": "bill"
+    },
+    "bill:BILL-0043": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0043",
+      "source_type": "bill"
+    },
+    "bill:BILL-0044": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0044",
+      "source_type": "bill"
+    },
+    "bill:BILL-0045": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0045",
+      "source_type": "bill"
+    },
+    "bill:BILL-0046": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0046",
+      "source_type": "bill"
+    },
+    "bill:BILL-0047": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0047",
+      "source_type": "bill"
+    },
+    "bill:BILL-0048": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0048",
+      "source_type": "bill"
+    },
+    "bill:BILL-0049": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0049",
+      "source_type": "bill"
+    },
+    "bill:BILL-0050": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0050",
+      "source_type": "bill"
+    },
+    "bill:BILL-0051": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0051",
+      "source_type": "bill"
+    },
+    "bill:BILL-0052": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0052",
+      "source_type": "bill"
+    },
+    "bill:BILL-0053": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0053",
+      "source_type": "bill"
+    },
+    "bill:BILL-0054": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0054",
+      "source_type": "bill"
+    },
+    "bill:BILL-0055": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0055",
+      "source_type": "bill"
+    },
+    "bill:BILL-0056": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0056",
+      "source_type": "bill"
+    },
+    "bill:BILL-0057": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0057",
+      "source_type": "bill"
+    },
+    "bill:BILL-0058": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0058",
+      "source_type": "bill"
+    },
+    "bill:BILL-0059": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0059",
+      "source_type": "bill"
+    },
+    "bill:BILL-0060": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "BILL-0060",
+      "source_type": "bill"
+    },
+    "invoice:INV-0001": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0001",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0001",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0002": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0002",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0002",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0003": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0003",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0003",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0004": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0004",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0004",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0005": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0005",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0005",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0006": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0006",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0006",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0007": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0007",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0007",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0008": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0008",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0008",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0009": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0009",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0009",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0010": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0010",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0010",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0011": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0011",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0011",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0012": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0012",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0012",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0013": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0013",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0013",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0014": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0014",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0014",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0015": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0015",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0015",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0016": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0016",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0016",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0017": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0017",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0017",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0018": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0018",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0018",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0019": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0019",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0019",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0020": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0020",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0020",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0021": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0021",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0021",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0022": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0022",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0022",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0023": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0023",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0023",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0024": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0024",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0024",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0025": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "LED-0025",
+          "source_type": "ledger"
+        }
+      ],
+      "record_id": "INV-0025",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0026": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0026",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0027": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0027",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0028": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0028",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0029": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0029",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0030": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0030",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0031": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0031",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0032": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0032",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0033": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0033",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0034": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0034",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0035": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0035",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0036": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0036",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0037": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0037",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0038": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0038",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0039": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0039",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0040": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0040",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0041": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0041",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0042": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0042",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0043": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0043",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0044": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0044",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0045": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0045",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0046": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0046",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0047": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0047",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0048": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0048",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0049": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0049",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0050": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0050",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0051": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0051",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0052": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0052",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0053": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0053",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0054": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0054",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0055": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0055",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0056": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0056",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0057": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0057",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0058": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0058",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0059": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0059",
+      "source_type": "invoice"
+    },
+    "invoice:INV-0060": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "INV-0060",
+      "source_type": "invoice"
+    },
+    "ledger:LED-0001": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0001",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0001",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0001",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0002": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0002",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0002",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0002",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0003": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0003",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0003",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0003",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0004": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0004",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0004",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0004",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0005": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0005",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0005",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0005",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0006": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0006",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0006",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0006",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0007": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0007",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0007",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0007",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0008": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0008",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0008",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0008",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0009": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0009",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0009",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0009",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0010": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0010",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0010",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0010",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0011": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0011",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0011",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0011",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0012": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0012",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0012",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0012",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0013": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0013",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0013",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0013",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0014": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0014",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0014",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0014",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0015": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0015",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0015",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0015",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0016": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0016",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0016",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0016",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0017": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0017",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0017",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0017",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0018": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0018",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0018",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0018",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0019": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0019",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0019",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0019",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0020": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0020",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0020",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0020",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0021": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0021",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0021",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0021",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0022": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0022",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0022",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0022",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0023": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0023",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0023",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0023",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0024": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0024",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0024",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0024",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0025": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0025",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "INV-0025",
+          "source_type": "invoice"
+        }
+      ],
+      "record_id": "LED-0025",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0026": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0026",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0001",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0026",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0027": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0027",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0002",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0027",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0028": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0028",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0003",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0028",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0029": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0029",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0004",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0029",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0030": {
+      "category": "clean_match",
+      "counterparts": [
+        {
+          "record_id": "BANK-0030",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0005",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0030",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0031": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0031",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0006",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0031",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0032": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0032",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0007",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0032",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0033": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0033",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0008",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0033",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0034": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0034",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0009",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0034",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0035": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0035",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0010",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0035",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0036": {
+      "category": "fee_mismatch",
+      "counterparts": [
+        {
+          "record_id": "BANK-0036",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0011",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0036",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0037": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "BANK-0037",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0012",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0037",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0038": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "BANK-0038",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0013",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0038",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0039": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "BANK-0039",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0014",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0039",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0040": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "BANK-0040",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0015",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0040",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0041": {
+      "category": "date_shift",
+      "counterparts": [
+        {
+          "record_id": "BANK-0041",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0016",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0041",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0042": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "BANK-0042",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0017",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0042",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0043": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "BANK-0043",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0018",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0043",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0044": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "BANK-0044",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0019",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0044",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0045": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "BANK-0045",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0020",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0045",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0046": {
+      "category": "fuzzy_desc",
+      "counterparts": [
+        {
+          "record_id": "BANK-0046",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0021",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0046",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0047": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "BANK-0047",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BANK-0048",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0022",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0047",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0048": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "BANK-0049",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BANK-0050",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0023",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0048",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0049": {
+      "category": "split_payment",
+      "counterparts": [
+        {
+          "record_id": "BANK-0051",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BANK-0052",
+          "source_type": "bank"
+        },
+        {
+          "record_id": "BILL-0024",
+          "source_type": "bill"
+        }
+      ],
+      "record_id": "LED-0049",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0050": {
+      "category": "duplicate",
+      "counterparts": [],
+      "record_id": "LED-0050",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0051": {
+      "category": "duplicate",
+      "counterparts": [],
+      "record_id": "LED-0051",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0052": {
+      "category": "duplicate",
+      "counterparts": [],
+      "record_id": "LED-0052",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0053": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "LED-0053",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0054": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "LED-0054",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0055": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "LED-0055",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0056": {
+      "category": "orphan_ledger",
+      "counterparts": [],
+      "record_id": "LED-0056",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0057": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "LED-0057",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0058": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "LED-0058",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0059": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "LED-0059",
+      "source_type": "ledger"
+    },
+    "ledger:LED-0060": {
+      "category": "ambiguous",
+      "counterparts": [],
+      "record_id": "LED-0060",
+      "source_type": "ledger"
+    }
+  },
+  "seed": 20260822
+}

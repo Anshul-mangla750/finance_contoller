@@ -1,0 +1,542 @@
+[
+  {
+    "amount": 1708.86,
+    "customer": "Duncan Inc",
+    "due_date": "2026-07-02",
+    "invoice_id": "INV-0001",
+    "issue_date": "2026-06-02",
+    "linked_ledger_id": "LED-0001",
+    "status": "paid"
+  },
+  {
+    "amount": 448.52,
+    "customer": "Porter, Baker and Moore",
+    "due_date": "2026-07-02",
+    "invoice_id": "INV-0002",
+    "issue_date": "2026-06-02",
+    "linked_ledger_id": "LED-0002",
+    "status": "paid"
+  },
+  {
+    "amount": 2469.49,
+    "customer": "Evans-Prince",
+    "due_date": "2026-07-02",
+    "invoice_id": "INV-0003",
+    "issue_date": "2026-06-02",
+    "linked_ledger_id": "LED-0003",
+    "status": "paid"
+  },
+  {
+    "amount": 499.67,
+    "customer": "Ball, Lopez and Johnson",
+    "due_date": "2026-07-05",
+    "invoice_id": "INV-0004",
+    "issue_date": "2026-06-05",
+    "linked_ledger_id": "LED-0004",
+    "status": "paid"
+  },
+  {
+    "amount": 51.02,
+    "customer": "Anderson-Johnson",
+    "due_date": "2026-07-05",
+    "invoice_id": "INV-0005",
+    "issue_date": "2026-06-05",
+    "linked_ledger_id": "LED-0005",
+    "status": "paid"
+  },
+  {
+    "amount": 1119.13,
+    "customer": "Moore, Ryan and Parker",
+    "due_date": "2026-07-06",
+    "invoice_id": "INV-0006",
+    "issue_date": "2026-06-06",
+    "linked_ledger_id": "LED-0006",
+    "status": "paid"
+  },
+  {
+    "amount": 2608.58,
+    "customer": "Sanchez Inc",
+    "due_date": "2026-07-08",
+    "invoice_id": "INV-0007",
+    "issue_date": "2026-06-08",
+    "linked_ledger_id": "LED-0007",
+    "status": "paid"
+  },
+  {
+    "amount": 272.02,
+    "customer": "Morales, Morgan and John",
+    "due_date": "2026-07-08",
+    "invoice_id": "INV-0008",
+    "issue_date": "2026-06-08",
+    "linked_ledger_id": "LED-0008",
+    "status": "paid"
+  },
+  {
+    "amount": 1643.97,
+    "customer": "Archer, Kemp and Blackwe",
+    "due_date": "2026-07-09",
+    "invoice_id": "INV-0009",
+    "issue_date": "2026-06-09",
+    "linked_ledger_id": "LED-0009",
+    "status": "paid"
+  },
+  {
+    "amount": 2180.42,
+    "customer": "Williams Ltd",
+    "due_date": "2026-07-11",
+    "invoice_id": "INV-0010",
+    "issue_date": "2026-06-11",
+    "linked_ledger_id": "LED-0010",
+    "status": "paid"
+  },
+  {
+    "amount": 108.93,
+    "customer": "Sweeney-Combs",
+    "due_date": "2026-07-11",
+    "invoice_id": "INV-0011",
+    "issue_date": "2026-06-11",
+    "linked_ledger_id": "LED-0011",
+    "status": "paid"
+  },
+  {
+    "amount": 2933.99,
+    "customer": "Taylor, Ross and Scott",
+    "due_date": "2026-07-13",
+    "invoice_id": "INV-0012",
+    "issue_date": "2026-06-13",
+    "linked_ledger_id": "LED-0012",
+    "status": "paid"
+  },
+  {
+    "amount": 1233.27,
+    "customer": "Anderson Inc",
+    "due_date": "2026-07-14",
+    "invoice_id": "INV-0013",
+    "issue_date": "2026-06-14",
+    "linked_ledger_id": "LED-0013",
+    "status": "paid"
+  },
+  {
+    "amount": 181.04,
+    "customer": "Hernandez PLC",
+    "due_date": "2026-07-15",
+    "invoice_id": "INV-0014",
+    "issue_date": "2026-06-15",
+    "linked_ledger_id": "LED-0014",
+    "status": "paid"
+  },
+  {
+    "amount": 440.4,
+    "customer": "Reid-Estes",
+    "due_date": "2026-07-16",
+    "invoice_id": "INV-0015",
+    "issue_date": "2026-06-16",
+    "linked_ledger_id": "LED-0015",
+    "status": "paid"
+  },
+  {
+    "amount": 1128.77,
+    "customer": "Lutz, Reed and Smith",
+    "due_date": "2026-07-15",
+    "invoice_id": "INV-0016",
+    "issue_date": "2026-06-15",
+    "linked_ledger_id": "LED-0016",
+    "status": "paid"
+  },
+  {
+    "amount": 839.5,
+    "customer": "Johnson Inc",
+    "due_date": "2026-07-16",
+    "invoice_id": "INV-0017",
+    "issue_date": "2026-06-16",
+    "linked_ledger_id": "LED-0017",
+    "status": "paid"
+  },
+  {
+    "amount": 3175.01,
+    "customer": "Martin Ltd",
+    "due_date": "2026-07-19",
+    "invoice_id": "INV-0018",
+    "issue_date": "2026-06-19",
+    "linked_ledger_id": "LED-0018",
+    "status": "paid"
+  },
+  {
+    "amount": 1659.21,
+    "customer": "Smith, Barber and Macias",
+    "due_date": "2026-07-19",
+    "invoice_id": "INV-0019",
+    "issue_date": "2026-06-19",
+    "linked_ledger_id": "LED-0019",
+    "status": "paid"
+  },
+  {
+    "amount": 103.01,
+    "customer": "Tanner, Riley and Conrad",
+    "due_date": "2026-07-21",
+    "invoice_id": "INV-0020",
+    "issue_date": "2026-06-21",
+    "linked_ledger_id": "LED-0020",
+    "status": "paid"
+  },
+  {
+    "amount": 136.23,
+    "customer": "Klein-Braun",
+    "due_date": "2026-07-22",
+    "invoice_id": "INV-0021",
+    "issue_date": "2026-06-22",
+    "linked_ledger_id": "LED-0021",
+    "status": "paid"
+  },
+  {
+    "amount": 1076.32,
+    "customer": "Liu, Schultz and Huff",
+    "due_date": "2026-07-23",
+    "invoice_id": "INV-0022",
+    "issue_date": "2026-06-23",
+    "linked_ledger_id": "LED-0022",
+    "status": "paid"
+  },
+  {
+    "amount": 192.31,
+    "customer": "Reilly, Walls and Esparz",
+    "due_date": "2026-07-22",
+    "invoice_id": "INV-0023",
+    "issue_date": "2026-06-22",
+    "linked_ledger_id": "LED-0023",
+    "status": "paid"
+  },
+  {
+    "amount": 2053.02,
+    "customer": "Booth, Perez and Daugher",
+    "due_date": "2026-07-23",
+    "invoice_id": "INV-0024",
+    "issue_date": "2026-06-23",
+    "linked_ledger_id": "LED-0024",
+    "status": "paid"
+  },
+  {
+    "amount": 1176.29,
+    "customer": "Whitehead, Frost and Bel",
+    "due_date": "2026-07-25",
+    "invoice_id": "INV-0025",
+    "issue_date": "2026-06-25",
+    "linked_ledger_id": "LED-0025",
+    "status": "paid"
+  },
+  {
+    "amount": 1329.62,
+    "customer": "Mitchell-Fisher",
+    "due_date": "2027-01-22",
+    "invoice_id": "INV-0026",
+    "issue_date": "2026-12-23",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1318.26,
+    "customer": "Warren LLC",
+    "due_date": "2027-01-23",
+    "invoice_id": "INV-0027",
+    "issue_date": "2026-12-24",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1457.02,
+    "customer": "Flores, Arnold and Davis",
+    "due_date": "2027-01-24",
+    "invoice_id": "INV-0028",
+    "issue_date": "2026-12-25",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 728.74,
+    "customer": "Cannon-Davidson",
+    "due_date": "2027-01-25",
+    "invoice_id": "INV-0029",
+    "issue_date": "2026-12-26",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 582.09,
+    "customer": "Hampton-Bruce",
+    "due_date": "2027-01-26",
+    "invoice_id": "INV-0030",
+    "issue_date": "2026-12-27",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 257.16,
+    "customer": "Dickerson-Yu",
+    "due_date": "2027-01-27",
+    "invoice_id": "INV-0031",
+    "issue_date": "2026-12-28",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 179.01,
+    "customer": "Anderson-Mcguire",
+    "due_date": "2027-01-28",
+    "invoice_id": "INV-0032",
+    "issue_date": "2026-12-29",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 130.38,
+    "customer": "Stevens-Kelly",
+    "due_date": "2027-01-29",
+    "invoice_id": "INV-0033",
+    "issue_date": "2026-12-30",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1783.03,
+    "customer": "Riley Group",
+    "due_date": "2027-01-30",
+    "invoice_id": "INV-0034",
+    "issue_date": "2026-12-31",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1507.77,
+    "customer": "Park, Moore and Lynch",
+    "due_date": "2027-01-31",
+    "invoice_id": "INV-0035",
+    "issue_date": "2027-01-01",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 981.83,
+    "customer": "Mccoy, Watson and Scott",
+    "due_date": "2027-02-01",
+    "invoice_id": "INV-0036",
+    "issue_date": "2027-01-02",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1049.89,
+    "customer": "Young, Rangel and Montoy",
+    "due_date": "2027-02-02",
+    "invoice_id": "INV-0037",
+    "issue_date": "2027-01-03",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 470.85,
+    "customer": "Mitchell, Cook and Miles",
+    "due_date": "2027-02-03",
+    "invoice_id": "INV-0038",
+    "issue_date": "2027-01-04",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 945.1,
+    "customer": "Wyatt, Mills and Reyes",
+    "due_date": "2027-02-04",
+    "invoice_id": "INV-0039",
+    "issue_date": "2027-01-05",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1481.15,
+    "customer": "Pitts-Rice",
+    "due_date": "2027-02-05",
+    "invoice_id": "INV-0040",
+    "issue_date": "2027-01-06",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1097.23,
+    "customer": "Johnson Inc",
+    "due_date": "2027-02-06",
+    "invoice_id": "INV-0041",
+    "issue_date": "2027-01-07",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1404.6,
+    "customer": "Gutierrez-Ramirez",
+    "due_date": "2027-02-07",
+    "invoice_id": "INV-0042",
+    "issue_date": "2027-01-08",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1339.41,
+    "customer": "Olson-Richardson",
+    "due_date": "2027-02-08",
+    "invoice_id": "INV-0043",
+    "issue_date": "2027-01-09",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 744.41,
+    "customer": "Brandt-Thomas",
+    "due_date": "2027-02-09",
+    "invoice_id": "INV-0044",
+    "issue_date": "2027-01-10",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 194.42,
+    "customer": "Johnson and Sons",
+    "due_date": "2027-02-10",
+    "invoice_id": "INV-0045",
+    "issue_date": "2027-01-11",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1370.49,
+    "customer": "Jackson-Strong",
+    "due_date": "2027-02-11",
+    "invoice_id": "INV-0046",
+    "issue_date": "2027-01-12",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1120.28,
+    "customer": "Browning-Morris",
+    "due_date": "2027-02-12",
+    "invoice_id": "INV-0047",
+    "issue_date": "2027-01-13",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1056.71,
+    "customer": "Best-Larson",
+    "due_date": "2027-02-13",
+    "invoice_id": "INV-0048",
+    "issue_date": "2027-01-14",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1140.57,
+    "customer": "Fitzpatrick-Hall",
+    "due_date": "2027-02-14",
+    "invoice_id": "INV-0049",
+    "issue_date": "2027-01-15",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 520.76,
+    "customer": "Fowler-Trevino",
+    "due_date": "2027-02-15",
+    "invoice_id": "INV-0050",
+    "issue_date": "2027-01-16",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1785.35,
+    "customer": "Charles, Anderson and Tu",
+    "due_date": "2027-02-16",
+    "invoice_id": "INV-0051",
+    "issue_date": "2027-01-17",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 1464.33,
+    "customer": "Esparza, Mata and Diaz",
+    "due_date": "2027-02-17",
+    "invoice_id": "INV-0052",
+    "issue_date": "2027-01-18",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 185.85,
+    "customer": "Oneal, White and Johnson",
+    "due_date": "2027-02-18",
+    "invoice_id": "INV-0053",
+    "issue_date": "2027-01-19",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 517.91,
+    "customer": "Jacobs Inc",
+    "due_date": "2027-02-19",
+    "invoice_id": "INV-0054",
+    "issue_date": "2027-01-20",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 387.98,
+    "customer": "Potter, Shelton and Mora",
+    "due_date": "2027-02-20",
+    "invoice_id": "INV-0055",
+    "issue_date": "2027-01-21",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 315.65,
+    "customer": "Valdez, Williams and Lew",
+    "due_date": "2027-02-21",
+    "invoice_id": "INV-0056",
+    "issue_date": "2027-01-22",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 599.5,
+    "customer": "Weber-Sanders",
+    "due_date": "2027-02-22",
+    "invoice_id": "INV-0057",
+    "issue_date": "2027-01-23",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 489.18,
+    "customer": "Turner, Myers and Adams",
+    "due_date": "2027-02-23",
+    "invoice_id": "INV-0058",
+    "issue_date": "2027-01-24",
+    "linked_ledger_id": null,
+    "status": "open"
+  },
+  {
+    "amount": 1756.63,
+    "customer": "Brooks LLC",
+    "due_date": "2027-02-24",
+    "invoice_id": "INV-0059",
+    "issue_date": "2027-01-25",
+    "linked_ledger_id": null,
+    "status": "past_due"
+  },
+  {
+    "amount": 342.61,
+    "customer": "Stevens Ltd",
+    "due_date": "2027-02-25",
+    "invoice_id": "INV-0060",
+    "issue_date": "2027-01-26",
+    "linked_ledger_id": null,
+    "status": "open"
+  }
+]

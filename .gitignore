@@ -1,0 +1,10 @@
+backend/app.db
+backend/generated/
+frontend/node_modules/
+frontend/dist/
+.env
+backend/.env
+frontend/.env
+*.pyc
+__pycache__/
+.pytest_cache/

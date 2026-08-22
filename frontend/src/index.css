@@ -1,0 +1,75 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-sand-50 text-ink-900 antialiased;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    background-image:
+      radial-gradient(circle at top left, rgba(90, 164, 105, 0.12), transparent 28%),
+      radial-gradient(circle at top right, rgba(217, 119, 6, 0.12), transparent 26%),
+      linear-gradient(180deg, #fffdf9 0%, #fbfaf7 45%, #f4efe6 100%);
+  }
+
+  * {
+    @apply border-sand-200;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-3xl border bg-white/85 shadow-glow backdrop-blur-sm;
+  }
+
+  .panel-soft {
+    @apply rounded-3xl border border-white/60 bg-white/70 shadow-sm backdrop-blur-sm;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-full border border-sand-200 bg-white px-3 py-1 text-xs font-medium text-ink-700 transition hover:border-moss-400 hover:text-moss-500;
+  }
+
+  .metric-card {
+    @apply panel p-5;
+  }
+
+  .metric-label {
+    @apply text-xs uppercase tracking-[0.22em] text-ink-500;
+  }
+
+  .metric-value {
+    @apply mt-2 text-3xl font-bold text-ink-950;
+  }
+
+  .metric-sub {
+    @apply mt-1 text-sm text-ink-600;
+  }
+
+  .table-shell {
+    @apply panel overflow-hidden;
+  }
+
+  .table-head {
+    @apply bg-sand-100/80 text-left text-[11px] uppercase tracking-[0.2em] text-ink-600;
+  }
+
+  .table-row {
+    @apply border-t border-sand-200/80 transition hover:bg-sand-50;
+  }
+
+  .mono {
+    font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  }
+}
+

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-finance-controller-backend"
+version = "0.1.0"
+description = "AI Finance Controller backend"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "sqlmodel>=0.0.22",
+  "sqlalchemy>=2.0",
+  "pydantic>=2.7",
+  "rapidfuzz>=3.9",
+  "faker>=26.0",
+  "google-genai>=0.5.0",
+  "chromadb>=0.5.5",
+  "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2",
+  "httpx>=0.27",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

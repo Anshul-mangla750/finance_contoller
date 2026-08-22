@@ -1,0 +1,422 @@
+[
+  {
+    "amount": -1708.86,
+    "date": "2026-06-02",
+    "description": "PMT Rodriguez, Duncan and Ha INV 0001",
+    "running_balance": 8291.14,
+    "txn_id": "BANK-0001"
+  },
+  {
+    "amount": -448.52,
+    "date": "2026-06-03",
+    "description": "PMT Smith LLC INV 0002",
+    "running_balance": 7842.62,
+    "txn_id": "BANK-0002"
+  },
+  {
+    "amount": -2469.49,
+    "date": "2026-06-04",
+    "description": "PMT Hess, Jones and Hunter INV 0003",
+    "running_balance": 5373.13,
+    "txn_id": "BANK-0003"
+  },
+  {
+    "amount": -499.67,
+    "date": "2026-06-05",
+    "description": "PMT Lawson, Kelly and Meyers INV 0004",
+    "running_balance": 4873.46,
+    "txn_id": "BANK-0004"
+  },
+  {
+    "amount": -51.02,
+    "date": "2026-06-06",
+    "description": "PMT Williams, Martinez and C INV 0005",
+    "running_balance": 4822.44,
+    "txn_id": "BANK-0005"
+  },
+  {
+    "amount": -1119.13,
+    "date": "2026-06-07",
+    "description": "PMT Werner-Davenport INV 0006",
+    "running_balance": 3703.31,
+    "txn_id": "BANK-0006"
+  },
+  {
+    "amount": -2608.58,
+    "date": "2026-06-08",
+    "description": "PMT Reyes LLC INV 0007",
+    "running_balance": 1094.73,
+    "txn_id": "BANK-0007"
+  },
+  {
+    "amount": -272.02,
+    "date": "2026-06-09",
+    "description": "PMT Williams, Fields and How INV 0008",
+    "running_balance": 822.71,
+    "txn_id": "BANK-0008"
+  },
+  {
+    "amount": -1643.97,
+    "date": "2026-06-10",
+    "description": "PMT Roberts, Rivera and Davi INV 0009",
+    "running_balance": -821.26,
+    "txn_id": "BANK-0009"
+  },
+  {
+    "amount": -2180.42,
+    "date": "2026-06-11",
+    "description": "PMT Coleman Group INV 0010",
+    "running_balance": -3001.68,
+    "txn_id": "BANK-0010"
+  },
+  {
+    "amount": -108.93,
+    "date": "2026-06-12",
+    "description": "PMT Robinson LLC INV 0011",
+    "running_balance": -3110.61,
+    "txn_id": "BANK-0011"
+  },
+  {
+    "amount": -2933.99,
+    "date": "2026-06-13",
+    "description": "PMT White-Martinez INV 0012",
+    "running_balance": -6044.6,
+    "txn_id": "BANK-0012"
+  },
+  {
+    "amount": -1233.27,
+    "date": "2026-06-14",
+    "description": "PMT Mckenzie Group INV 0013",
+    "running_balance": -7277.87,
+    "txn_id": "BANK-0013"
+  },
+  {
+    "amount": -181.04,
+    "date": "2026-06-15",
+    "description": "PMT Delgado-Reilly INV 0014",
+    "running_balance": -7458.91,
+    "txn_id": "BANK-0014"
+  },
+  {
+    "amount": -440.4,
+    "date": "2026-06-16",
+    "description": "PMT Gilbert-Jones INV 0015",
+    "running_balance": -7899.31,
+    "txn_id": "BANK-0015"
+  },
+  {
+    "amount": -1128.77,
+    "date": "2026-06-17",
+    "description": "PMT Newton-Vance INV 0016",
+    "running_balance": -9028.08,
+    "txn_id": "BANK-0016"
+  },
+  {
+    "amount": -839.5,
+    "date": "2026-06-18",
+    "description": "PMT Chapman-Brown INV 0017",
+    "running_balance": -9867.58,
+    "txn_id": "BANK-0017"
+  },
+  {
+    "amount": -3175.01,
+    "date": "2026-06-19",
+    "description": "PMT Johnson, Schultz and Roc INV 0018",
+    "running_balance": -13042.59,
+    "txn_id": "BANK-0018"
+  },
+  {
+    "amount": -1659.21,
+    "date": "2026-06-20",
+    "description": "PMT Haley Ltd INV 0019",
+    "running_balance": -14701.8,
+    "txn_id": "BANK-0019"
+  },
+  {
+    "amount": -103.01,
+    "date": "2026-06-21",
+    "description": "PMT Nelson-Burgess INV 0020",
+    "running_balance": -14804.81,
+    "txn_id": "BANK-0020"
+  },
+  {
+    "amount": -136.23,
+    "date": "2026-06-22",
+    "description": "PMT Cook, Johnson and Rosale INV 0021",
+    "running_balance": -14941.04,
+    "txn_id": "BANK-0021"
+  },
+  {
+    "amount": -1076.32,
+    "date": "2026-06-23",
+    "description": "PMT Hall, Watson and Anderso INV 0022",
+    "running_balance": -16017.36,
+    "txn_id": "BANK-0022"
+  },
+  {
+    "amount": -192.31,
+    "date": "2026-06-24",
+    "description": "PMT Weber-Murphy INV 0023",
+    "running_balance": -16209.67,
+    "txn_id": "BANK-0023"
+  },
+  {
+    "amount": -2053.02,
+    "date": "2026-06-25",
+    "description": "PMT Adams-Morris INV 0024",
+    "running_balance": -18262.69,
+    "txn_id": "BANK-0024"
+  },
+  {
+    "amount": -1176.29,
+    "date": "2026-06-26",
+    "description": "PMT Sharp Ltd INV 0025",
+    "running_balance": -19438.98,
+    "txn_id": "BANK-0025"
+  },
+  {
+    "amount": -2424.92,
+    "date": "2026-06-27",
+    "description": "PMT Rivera, Chapman and Wils INV 0026",
+    "running_balance": -21863.9,
+    "txn_id": "BANK-0026"
+  },
+  {
+    "amount": -1735.3,
+    "date": "2026-06-28",
+    "description": "PMT Mason-Cooper INV 0027",
+    "running_balance": -23599.2,
+    "txn_id": "BANK-0027"
+  },
+  {
+    "amount": -477.42,
+    "date": "2026-06-29",
+    "description": "PMT Cortez, Peterson and Ort INV 0028",
+    "running_balance": -24076.62,
+    "txn_id": "BANK-0028"
+  },
+  {
+    "amount": -1671.76,
+    "date": "2026-06-30",
+    "description": "PMT Yates Ltd INV 0029",
+    "running_balance": -25748.38,
+    "txn_id": "BANK-0029"
+  },
+  {
+    "amount": -1719.43,
+    "date": "2026-07-01",
+    "description": "PMT Shea-Padilla INV 0030",
+    "running_balance": -27467.81,
+    "txn_id": "BANK-0030"
+  },
+  {
+    "amount": -212.83,
+    "date": "2026-07-01",
+    "description": "ACH Cox, Walters and Mueller INV 0031 FEE",
+    "running_balance": -27680.64,
+    "txn_id": "BANK-0031"
+  },
+  {
+    "amount": -734.43,
+    "date": "2026-07-03",
+    "description": "ACH Santiago and Sons INV 0032 FEE",
+    "running_balance": -28415.07,
+    "txn_id": "BANK-0032"
+  },
+  {
+    "amount": -622.57,
+    "date": "2026-07-03",
+    "description": "ACH Huff-Rasmussen INV 0033 FEE",
+    "running_balance": -29037.64,
+    "txn_id": "BANK-0033"
+  },
+  {
+    "amount": -2653.54,
+    "date": "2026-07-06",
+    "description": "ACH Crawford-Mcdonald INV 0034 FEE",
+    "running_balance": -31691.18,
+    "txn_id": "BANK-0034"
+  },
+  {
+    "amount": -1136.58,
+    "date": "2026-07-07",
+    "description": "ACH Porter and Sons INV 0035 FEE",
+    "running_balance": -32827.76,
+    "txn_id": "BANK-0035"
+  },
+  {
+    "amount": -1032.26,
+    "date": "2026-07-08",
+    "description": "ACH Owen and Sons INV 0036 FEE",
+    "running_balance": -33860.02,
+    "txn_id": "BANK-0036"
+  },
+  {
+    "amount": -1640.54,
+    "date": "2026-07-12",
+    "description": "WIRE Fox, Michael and Lopez 0037",
+    "running_balance": -35500.56,
+    "txn_id": "BANK-0037"
+  },
+  {
+    "amount": -942.39,
+    "date": "2026-07-12",
+    "description": "WIRE Thompson Ltd 0038",
+    "running_balance": -36442.95,
+    "txn_id": "BANK-0038"
+  },
+  {
+    "amount": -2460.64,
+    "date": "2026-07-15",
+    "description": "WIRE Rodriguez-Woods 0039",
+    "running_balance": -38903.59,
+    "txn_id": "BANK-0039"
+  },
+  {
+    "amount": -157.81,
+    "date": "2026-07-16",
+    "description": "WIRE Torres, Jensen and Ander 0040",
+    "running_balance": -42098.05,
+    "txn_id": "BANK-0040"
+  },
+  {
+    "amount": -3036.65,
+    "date": "2026-07-15",
+    "description": "WIRE Moore, Colon and William 0041",
+    "running_balance": -41940.24,
+    "txn_id": "BANK-0041"
+  },
+  {
+    "amount": -538.02,
+    "date": "2026-07-18",
+    "description": "Moore and Sons settlement 0042",
+    "running_balance": -42636.07,
+    "txn_id": "BANK-0042"
+  },
+  {
+    "amount": -1423.61,
+    "date": "2026-07-19",
+    "description": "Roberts-Daniel settlement 0043",
+    "running_balance": -44059.68,
+    "txn_id": "BANK-0043"
+  },
+  {
+    "amount": -2403.32,
+    "date": "2026-07-20",
+    "description": "Bowen-Rowland settlement 0044",
+    "running_balance": -47555.98,
+    "txn_id": "BANK-0044"
+  },
+  {
+    "amount": -1092.98,
+    "date": "2026-07-19",
+    "description": "Martinez-Walker settlement 0045",
+    "running_balance": -45152.66,
+    "txn_id": "BANK-0045"
+  },
+  {
+    "amount": -1144.37,
+    "date": "2026-07-22",
+    "description": "Moore-Crawford settlement 0046",
+    "running_balance": -48700.35,
+    "txn_id": "BANK-0046"
+  },
+  {
+    "amount": -164.59,
+    "date": "2026-08-02",
+    "description": "PARTIAL Harris-Patterson 0047",
+    "running_balance": -48864.94,
+    "txn_id": "BANK-0047"
+  },
+  {
+    "amount": -164.85,
+    "date": "2026-08-04",
+    "description": "PARTIAL Harris-Patterson 0047",
+    "running_balance": -49029.79,
+    "txn_id": "BANK-0048"
+  },
+  {
+    "amount": -382.3,
+    "date": "2026-08-04",
+    "description": "PARTIAL Brown PLC 0048",
+    "running_balance": -49412.09,
+    "txn_id": "BANK-0049"
+  },
+  {
+    "amount": -382.18,
+    "date": "2026-08-05",
+    "description": "PARTIAL Brown PLC 0048",
+    "running_balance": -49972.04,
+    "txn_id": "BANK-0050"
+  },
+  {
+    "amount": -177.77,
+    "date": "2026-08-04",
+    "description": "PARTIAL Decker PLC 0049",
+    "running_balance": -49589.86,
+    "txn_id": "BANK-0051"
+  },
+  {
+    "amount": -178.3,
+    "date": "2026-08-05",
+    "description": "PARTIAL Decker PLC 0049",
+    "running_balance": -50150.34,
+    "txn_id": "BANK-0052"
+  },
+  {
+    "amount": -146.84,
+    "date": "2026-09-29",
+    "description": "BANK Bank fee CHG",
+    "running_balance": -50297.18,
+    "txn_id": "BANK-0053"
+  },
+  {
+    "amount": 136.26,
+    "date": "2026-09-30",
+    "description": "BANK Bank fee CHG",
+    "running_balance": -50160.92,
+    "txn_id": "BANK-0054"
+  },
+  {
+    "amount": -249.81,
+    "date": "2026-10-01",
+    "description": "BANK Bank fee CHG",
+    "running_balance": -50410.73,
+    "txn_id": "BANK-0055"
+  },
+  {
+    "amount": 129.25,
+    "date": "2026-10-02",
+    "description": "BANK Bank fee CHG",
+    "running_balance": -50281.48,
+    "txn_id": "BANK-0056"
+  },
+  {
+    "amount": -321.74,
+    "date": "2026-10-29",
+    "description": "UNALLOCATED misc-0-speak",
+    "running_balance": -50603.22,
+    "txn_id": "BANK-0057"
+  },
+  {
+    "amount": -261.87,
+    "date": "2026-10-30",
+    "description": "UNALLOCATED misc-1-soldier",
+    "running_balance": -50865.09,
+    "txn_id": "BANK-0058"
+  },
+  {
+    "amount": -342.39,
+    "date": "2026-10-31",
+    "description": "UNALLOCATED misc-2-window",
+    "running_balance": -51207.48,
+    "txn_id": "BANK-0059"
+  },
+  {
+    "amount": -402.92,
+    "date": "2026-11-01",
+    "description": "UNALLOCATED misc-3-political",
+    "running_balance": -51610.4,
+    "txn_id": "BANK-0060"
+  }
+]
