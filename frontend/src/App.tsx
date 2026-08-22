@@ -23,8 +23,8 @@ export default function App() {
       try {
         const latest = await loadLatestRun();
         setData(latest);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load latest run.");
+      } catch {
+        // no data yet
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,7 @@ export default function App() {
       setFocusedRecordId(null);
       setView("overview");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Reconciliation failed.");
+      setError(err instanceof Error ? err.message : "Failed.");
     } finally {
       setRunning(false);
     }
@@ -62,7 +62,7 @@ export default function App() {
     }
   }
 
-  async function handleRunFromFolder(inputDir: string) {
+  async function handleFolderRun(inputDir: string) {
     setRunning(true);
     setError(null);
     try {
@@ -78,136 +78,138 @@ export default function App() {
     }
   }
 
-  function handleFocusRecord(recordId: string) {
-    setFocusedRecordId(recordId);
-    if (data?.exceptions.some((row) => row.record_id === recordId)) {
-      setView("errors");
-    } else {
-      setView("matches");
-    }
+  function navigateTo(v: View) {
+    setView(v);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  const matches = data?.matches ?? [];
-  const exceptions = data?.exceptions ?? [];
+  function handleFocusRecord(recordId: string) {
+    setFocusedRecordId(recordId);
+    const inExceptions = data?.exceptions.some((e) => e.record_id === recordId) ?? false;
+    navigateTo(inExceptions ? "errors" : "matches");
+  }
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9]">
+    <div className="min-h-screen bg-[#f0f2f5]">
       <Sidebar
         currentView={view}
-        onNavigate={setView}
+        onNavigate={navigateTo}
         exceptionCount={data?.kpis.exception_count ?? 0}
         isRunning={running}
       />
 
-      <main className="main-content">
+      <main className="app-main">
         {/* Top Bar */}
-        <div className="sticky top-0 z-40 bg-[#f1f5f9]/80 backdrop-blur-xl border-b border-[#e2e8f0]">
-          <div className="flex items-center justify-between px-6 lg:px-8 py-4">
+        <header className="sticky top-0 z-30 glass border-b border-gray-200/60">
+          <div className="flex items-center justify-between px-6 lg:px-8 py-3.5">
             <div>
-              <h1 className="text-lg font-bold text-[#0f172a]">
+              <h1 className="text-base font-bold text-gray-900">
                 {view === "overview" && "Dashboard Overview"}
                 {view === "matches" && "Matches & Exceptions"}
                 {view === "errors" && "Error Analysis"}
                 {view === "ask" && "AI Agent"}
               </h1>
-              <p className="text-xs text-[#64748b] mt-0.5">
-                {view === "overview" && "KPIs, accuracy metrics, and reconciliation summary"}
-                {view === "matches" && "Matched records and exception list with audit trail"}
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                {view === "overview" && "Metrics, accuracy, and reconciliation summary"}
+                {view === "matches" && "Matched records and exception audit trail"}
                 {view === "errors" && "What went wrong, where, and why — per exception"}
-                {view === "ask" && "Grounded Q&A over reconciliation data"}
+                {view === "ask" && "Natural-language Q&A over your reconciliation data"}
               </p>
             </div>
             <div className="flex items-center gap-3">
-              {error && (
-                <span className="badge badge-red max-w-[300px] truncate">{error}</span>
+              {data && (
+                <div className="hidden md:flex items-center gap-2 text-[11px] text-gray-500">
+                  <span className="font-mono">{data.kpis.records_processed}</span> records ·
+                  <span className="font-mono text-emerald-600 font-semibold">{Math.round(data.kpis.match_rate * 100)}%</span> matched ·
+                  <span className="font-mono text-red-500 font-semibold">{data.kpis.exception_count}</span> exceptions
+                </div>
               )}
-              <button
-                type="button"
-                onClick={() => void handleRun()}
-                disabled={running}
-                className="btn-primary"
-              >
+              {error && <span className="pill pill-red max-w-[250px] truncate">{error}</span>}
+              <button onClick={() => void handleRun()} disabled={running} className="btn-green">
                 {running ? (
-                  <>
-                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    Running...
-                  </>
+                  <><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Running...</>
                 ) : (
-                  <>
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-                    </svg>
-                    Run Reconciliation
-                  </>
+                  <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>Run Reconciliation</>
                 )}
               </button>
             </div>
           </div>
-        </div>
+        </header>
 
-        {/* Content */}
-        <div className="content-area">
+        {/* Content Area — each page renders its OWN content */}
+        <div className="page-pad">
+
+          {/* LOADING */}
           {loading && (
-            <div className="card p-12 text-center">
-              <div className="inline-flex items-center gap-3 text-[#64748b]">
-                <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                </svg>
-                Loading latest reconciliation run...
+            <div className="space-y-4 anim-fade-in">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[1,2,3,4].map((i) => (
+                  <div key={i} className="solid p-5 anim-shimmer h-28 rounded-2xl" />
+                ))}
+              </div>
+              <div className="solid p-8 anim-shimmer h-64 rounded-2xl" />
+            </div>
+          )}
+
+          {/* NO DATA */}
+          {!loading && !data && view === "overview" && (
+            <div className="anim-fade-up space-y-6">
+              <div className="elevated p-8 text-center">
+                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center mb-4 anim-bounce-in">
+                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-bold text-gray-900">Welcome to AI Finance Controller</h2>
+                <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">Click <strong>Run Reconciliation</strong> above to generate synthetic data and process the full batch end-to-end.</p>
+              </div>
+              <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleFolderRun} busy={running} />
+            </div>
+          )}
+
+          {/* NO DATA — other pages */}
+          {!loading && !data && view !== "overview" && (
+            <div className="anim-fade-up">
+              <div className="solid p-12 text-center">
+                <div className="text-4xl mb-3">📊</div>
+                <h3 className="text-lg font-bold text-gray-900">No data yet</h3>
+                <p className="mt-2 text-sm text-gray-500">Run a reconciliation first from the Overview page.</p>
+                <button onClick={() => navigateTo("overview")} className="btn-green mt-4">Go to Overview</button>
               </div>
             </div>
           )}
 
-          {!loading && !data && (
-            <div className="space-y-6 animate-fadeIn">
-              <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
-              <div className="card p-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#f1f5f9] flex items-center justify-center shrink-0">
-                    <svg className="w-5 h-5 text-[#64748b]" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-[#0f172a]">No reconciliation data yet</h3>
-                    <p className="mt-1 text-sm text-[#64748b]">
-                      Click <strong>Run Reconciliation</strong> to generate synthetic data and process the full batch,
-                      or upload your own files above.
-                    </p>
-                  </div>
-                </div>
-              </div>
+          {/* HAS DATA — render based on current view */}
+          {!loading && data && view === "overview" && (
+            <div className="space-y-6 anim-fade-up">
+              <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleFolderRun} busy={running} />
+              <OverviewPage kpis={data.kpis} accuracy={data.accuracy} onRun={handleRun} running={running} />
             </div>
           )}
 
-          {!loading && data && (
-            <div className="animate-fadeIn">
-              {view === "overview" && (
-                <div className="space-y-6">
-                  <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleRunFromFolder} busy={running} />
-                  <OverviewPage kpis={data.kpis} accuracy={data.accuracy} onRun={handleRun} running={running} />
-                </div>
-              )}
-              {view === "matches" && (
-                <MatchesPage
-                  matches={matches}
-                  exceptions={exceptions}
-                  focusedRecordId={focusedRecordId}
-                  onFocusRecord={handleFocusRecord}
-                />
-              )}
-              {view === "errors" && (
-                <ErrorsPage exceptions={exceptions} onFocusRecord={handleFocusRecord} />
-              )}
-              {view === "ask" && (
-                <AskAgentPage onFocusRecord={handleFocusRecord} />
-              )}
+          {!loading && data && view === "matches" && (
+            <div className="anim-fade-up">
+              <MatchesPage
+                matches={data.matches}
+                exceptions={data.exceptions}
+                focusedRecordId={focusedRecordId}
+                onFocusRecord={handleFocusRecord}
+              />
             </div>
           )}
+
+          {!loading && data && view === "errors" && (
+            <div className="anim-fade-up">
+              <ErrorsPage exceptions={data.exceptions} onFocusRecord={handleFocusRecord} />
+            </div>
+          )}
+
+          {!loading && data && view === "ask" && (
+            <div className="anim-fade-up">
+              <AskAgentPage onFocusRecord={handleFocusRecord} />
+            </div>
+          )}
+
         </div>
       </main>
     </div>
