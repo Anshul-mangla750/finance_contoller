@@ -34,6 +34,7 @@ export default function App() {
   const [running, setRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [focusedRecordId, setFocusedRecordId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -97,6 +98,7 @@ export default function App() {
 
   function navigateTo(nextView: View) {
     setView(nextView);
+    setIsSidebarOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -121,25 +123,42 @@ export default function App() {
         onNavigate={navigateTo}
         exceptionCount={data?.kpis.exception_count ?? 0}
         isRunning={running}
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
       />
 
       <main className="app-main">
         <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/72 backdrop-blur-xl">
-          <div className="flex flex-col gap-4 px-5 py-4 lg:px-8">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-              <div>
-                <div className="hero-kicker">Agentic Finance Platform</div>
-                <h1 className="mt-3 text-xl font-extrabold tracking-tight text-white lg:text-2xl" style={{ fontFamily: "Space Grotesk, Inter, system-ui, sans-serif" }}>
-                  {currentCopy.title}
-                </h1>
-                <p className="mt-1 max-w-3xl text-sm text-slate-400">
-                  {currentCopy.subtitle}
-                </p>
+          <div className="flex flex-col gap-4 px-4 py-4 sm:px-5 lg:px-8">
+            <div className="flex items-start justify-between gap-3 lg:items-end">
+              <div className="flex min-w-0 items-start gap-3">
+                <button
+                  type="button"
+                  className="mobile-nav-toggle lg:hidden"
+                  onClick={() => setIsSidebarOpen(true)}
+                  aria-label="Open navigation"
+                >
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+                </button>
+                <div className="min-w-0">
+                  <div className="hero-kicker">Agentic Finance Platform</div>
+                  <h1
+                    className="mt-3 text-xl font-extrabold tracking-tight text-white sm:text-2xl lg:text-3xl"
+                    style={{ fontFamily: "Space Grotesk, Inter, system-ui, sans-serif" }}
+                  >
+                    {currentCopy.title}
+                  </h1>
+                  <p className="mt-1 max-w-3xl text-sm text-slate-400">
+                    {currentCopy.subtitle}
+                  </p>
+                </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="hidden items-center gap-2 md:flex">
                 {data && (
-                  <div className="hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-slate-300 md:flex md:items-center md:gap-2">
+                  <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-slate-300 md:flex md:items-center md:gap-2">
                     <span className="mono text-slate-100">{data.kpis.records_processed}</span>
                     records
                     <span className="text-slate-500">|</span>
@@ -155,6 +174,23 @@ export default function App() {
                   {running ? "Running..." : "Run Reconciliation"}
                 </button>
               </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 md:hidden">
+              {data && (
+                <div className="flex flex-wrap gap-2">
+                  <span className="pill pill-slate">
+                    <span className="mono text-slate-100">{data.kpis.records_processed}</span> records
+                  </span>
+                  <span className="pill pill-green">
+                    <span className="mono">{Math.round(data.kpis.match_rate * 100)}%</span> matched
+                  </span>
+                  <span className="pill pill-amber">
+                    <span className="mono">{data.kpis.exception_count}</span> exceptions
+                  </span>
+                </div>
+              )}
+              {error && <span className="pill pill-red max-w-full truncate">{error}</span>}
             </div>
 
             <div className="process-rail">
@@ -177,12 +213,12 @@ export default function App() {
         <div className="page-pad">
           {loading && (
             <div className="space-y-4 anim-fade-in">
-              <div className="grid gap-4 lg:grid-cols-4">
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="solid h-28 rounded-[24px] anim-shimmer" />
+                  <div key={i} className="solid h-24 rounded-[24px] anim-shimmer sm:h-28" />
                 ))}
               </div>
-              <div className="solid h-72 rounded-[28px] anim-shimmer" />
+              <div className="solid h-64 rounded-[28px] anim-shimmer sm:h-72" />
             </div>
           )}
 
@@ -215,7 +251,7 @@ export default function App() {
           {!loading && !data && view !== "overview" && (
             <div className="solid p-12 text-center anim-fade-up">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-white/5 text-3xl">
-                {view === "matches" ? "↔" : view === "errors" ? "!" : "⌁"}
+                {view === "matches" ? "<>" : view === "errors" ? "!" : "~"}
               </div>
               <h3 className="text-lg font-bold text-white">No live run yet</h3>
               <p className="mt-2 text-sm text-slate-400">Run reconciliation from the Command Center to unlock this view.</p>

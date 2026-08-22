@@ -1,6 +1,13 @@
 import type { View } from "../types";
 
-type Props = { currentView: View; onNavigate: (v: View) => void; exceptionCount: number; isRunning: boolean };
+type Props = {
+  currentView: View;
+  onNavigate: (v: View) => void;
+  exceptionCount: number;
+  isRunning: boolean;
+  isOpen: boolean;
+  onClose: () => void;
+};
 
 const NAV: { v: View; label: string; sub: string; icon: string }[] = [
   { v: "overview", label: "Command Center", sub: "Observe and verify", icon: "M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" },
@@ -9,9 +16,16 @@ const NAV: { v: View; label: string; sub: string; icon: string }[] = [
   { v: "ask", label: "AI Copilot", sub: "Grounded answers", icon: "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" },
 ];
 
-export function Sidebar({ currentView, onNavigate, exceptionCount, isRunning }: Props) {
+export function Sidebar({ currentView, onNavigate, exceptionCount, isRunning, isOpen, onClose }: Props) {
   return (
-    <aside className="sidebar">
+    <>
+      <button
+        type="button"
+        aria-label="Close navigation"
+        className={`sidebar-backdrop ${isOpen ? "sidebar-backdrop-open" : ""}`}
+        onClick={onClose}
+      />
+      <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
       <div className="px-5 py-5 border-b border-white/5">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-cyan-400 shadow-lg shadow-emerald-500/20">
@@ -29,7 +43,14 @@ export function Sidebar({ currentView, onNavigate, exceptionCount, isRunning }: 
       <nav className="flex-1 space-y-1 px-3 py-4">
         <div className="px-3 mb-2 text-[9px] font-bold uppercase tracking-[0.28em] text-slate-600">Navigation</div>
         {NAV.map(({ v, label, icon, sub }) => (
-          <button key={v} onClick={() => onNavigate(v)} className={`sidebar-link w-full group ${currentView === v ? "sidebar-link-active" : ""}`}>
+          <button
+            key={v}
+            onClick={() => {
+              onNavigate(v);
+              onClose();
+            }}
+            className={`sidebar-link w-full group ${currentView === v ? "sidebar-link-active" : ""}`}
+          >
             <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
             </svg>
@@ -60,6 +81,7 @@ export function Sidebar({ currentView, onNavigate, exceptionCount, isRunning }: 
         </div>
         <div className="mt-3 text-[9px] leading-relaxed text-slate-500">Observe - understand - decide - act - verify.</div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
