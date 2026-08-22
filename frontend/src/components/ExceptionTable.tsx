@@ -4,69 +4,131 @@ import type { ExceptionRow } from "../types";
 type Props = { exceptions: ExceptionRow[]; focusedRecordId: string | null; onFocusRecord: (id: string) => void };
 
 const STATUS: Record<string, string> = {
-  MISSING_RECORD: "pill-red", DUPLICATE: "pill-amber", AMOUNT_MISMATCH: "pill-amber",
-  DATE_MISMATCH: "pill-blue", NEEDS_HUMAN_REVIEW: "pill-purple", LOW_CONFIDENCE: "pill-gray",
+  MISSING_RECORD: "pill-red",
+  DUPLICATE: "pill-amber",
+  AMOUNT_MISMATCH: "pill-amber",
+  DATE_MISMATCH: "pill-blue",
+  NEEDS_HUMAN_REVIEW: "pill-purple",
+  LOW_CONFIDENCE: "pill-gray",
 };
+
 const REASON: Record<string, string> = {
-  missing_counterpart: "Missing", amount_mismatch: "Amount", duplicate_suspected: "Duplicate",
-  date_out_of_tolerance: "Date", unresolved_ambiguous: "Ambiguous", low_confidence_llm: "Low Conf",
+  missing_counterpart: "Missing",
+  amount_mismatch: "Amount",
+  duplicate_suspected: "Duplicate",
+  date_out_of_tolerance: "Date",
+  unresolved_ambiguous: "Ambiguous",
+  low_confidence_llm: "Low Confidence",
 };
 
 export function ExceptionTable({ exceptions, focusedRecordId, onFocusRecord }: Props) {
-  const [q, setQ] = useState("");
-  const [src, setSrc] = useState("");
+  const [query, setQuery] = useState("");
+  const [source, setSource] = useState("");
   const [reason, setReason] = useState("");
 
   const rows = useMemo(() => {
-    return exceptions.filter((e) => {
-      const sq = q.toLowerCase();
-      return (!src || e.source_type === src) && (!reason || e.reason_category === reason) &&
-        (!sq || [e.source_type, e.record_id, e.reason_category, e.explanation, e.status].join(" ").toLowerCase().includes(sq));
+    const needle = query.trim().toLowerCase();
+
+    return exceptions.filter((exception) => {
+      const matchesSource = !source || exception.source_type === source;
+      const matchesReason = !reason || exception.reason_category === reason;
+      const matchesQuery =
+        !needle ||
+        [exception.source_type, exception.record_id, exception.reason_category, exception.explanation, exception.status]
+          .join(" ")
+          .toLowerCase()
+          .includes(needle);
+
+      return matchesSource && matchesReason && matchesQuery;
     });
-  }, [exceptions, q, src, reason]);
+  }, [exceptions, query, source, reason]);
 
   return (
-    <div className="solid overflow-hidden">
-      <div className="p-4 border-b border-gray-200">
-        <div className="flex items-center justify-between mb-3">
+    <div className="surface overflow-hidden">
+      <div className="border-b border-white/5 p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Exceptions</div>
-            <h3 className="text-base font-bold text-gray-900">Unresolved List</h3>
-            <p className="text-[11px] text-gray-400">{rows.length}/{exceptions.length} shown · matched + exceptions = total</p>
+            <div className="hero-kicker">Exceptions</div>
+            <h3 className="section-title mt-3">Unresolved List</h3>
+            <p className="section-sub">
+              {rows.length}/{exceptions.length} shown.
+            </p>
           </div>
+          <span className="pill pill-amber">Review queue</span>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search..." className="field flex-1 min-w-[120px]" />
-          <select value={src} onChange={(e) => setSrc(e.target.value)} className="sel"><option value="">All Sources</option><option>bank</option><option>ledger</option><option>invoice</option><option>bill</option></select>
-          <select value={reason} onChange={(e) => setReason(e.target.value)} className="sel"><option value="">All Reasons</option><option value="missing_counterpart">Missing</option><option value="amount_mismatch">Amount</option><option value="duplicate_suspected">Duplicate</option><option value="date_out_of_tolerance">Date</option><option value="unresolved_ambiguous">Ambiguous</option><option value="low_confidence_llm">Low Conf</option></select>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search..." className="field flex-1 min-w-[140px]" />
+          <select value={source} onChange={(e) => setSource(e.target.value)} className="sel">
+            <option value="">All Sources</option>
+            <option value="bank">bank</option>
+            <option value="ledger">ledger</option>
+            <option value="invoice">invoice</option>
+            <option value="bill">bill</option>
+          </select>
+          <select value={reason} onChange={(e) => setReason(e.target.value)} className="sel">
+            <option value="">All Reasons</option>
+            <option value="missing_counterpart">Missing</option>
+            <option value="amount_mismatch">Amount</option>
+            <option value="duplicate_suspected">Duplicate</option>
+            <option value="date_out_of_tolerance">Date</option>
+            <option value="unresolved_ambiguous">Ambiguous</option>
+            <option value="low_confidence_llm">Low Confidence</option>
+          </select>
         </div>
       </div>
-      <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+
+      <div className="max-h-[600px] overflow-x-auto overflow-y-auto">
         <table className="min-w-full">
           <thead className="tbl-head sticky top-0 z-10">
-            <tr><th>Source</th><th>Record</th><th>Status</th><th>Best Candidate</th><th>Explanation</th><th>Action</th></tr>
+            <tr>
+              <th>Source</th>
+              <th>Record</th>
+              <th>Status</th>
+              <th>Best Candidate</th>
+              <th>Explanation</th>
+              <th>Action</th>
+            </tr>
           </thead>
           <tbody className="tbl-body">
-            {rows.map((e, i) => (
-              <tr key={`${e.source_type}:${e.record_id}`}
-                className={`${focusedRecordId === e.record_id ? "bg-amber-50" : ""} anim-fade-in`}
-                style={{ animationDelay: `${Math.min(i * 20, 400)}ms` }}>
-                <td className="font-medium capitalize">{e.source_type}</td>
+            {rows.map((exception, index) => (
+              <tr
+                key={`${exception.source_type}:${exception.record_id}`}
+                className={`${focusedRecordId === exception.record_id ? "bg-amber-500/5" : ""} anim-fade-in`}
+                style={{ animationDelay: `${Math.min(index * 20, 400)}ms` }}
+              >
+                <td className="font-medium capitalize text-slate-200">{exception.source_type}</td>
                 <td>
-                  <button className="chip mono text-[10px]" onClick={() => onFocusRecord(e.record_id)}>{e.record_id}</button>
-                  <div className="text-[9px] text-gray-400 mt-0.5">{REASON[e.reason_category] ?? e.reason_category}</div>
+                  <button className="chip mono text-[10px]" onClick={() => onFocusRecord(exception.record_id)}>
+                    {exception.record_id}
+                  </button>
+                  <div className="mt-0.5 text-[9px] text-slate-500">{REASON[exception.reason_category] ?? exception.reason_category}</div>
                 </td>
-                <td><span className={`pill ${STATUS[e.status] ?? "pill-gray"}`}>{(e.status ?? "?").replace(/_/g, " ")}</span></td>
-                <td className="mono text-[11px]">
-                  {e.best_candidate_id ? (
-                    <div>{e.best_candidate_type}:{e.best_candidate_id} <span className="text-gray-400">{e.best_candidate_confidence != null ? `${Math.round(e.best_candidate_confidence * 100)}%` : ""}</span></div>
-                  ) : <span className="text-gray-300">—</span>}
+                <td>
+                  <span className={`pill ${STATUS[exception.status] ?? "pill-gray"}`}>{exception.status.replace(/_/g, " ")}</span>
                 </td>
-                <td className="text-[11px] text-gray-500 max-w-[220px] truncate">{e.explanation}</td>
-                <td className="text-[11px] text-gray-500 max-w-[180px] truncate">{e.suggested_action}</td>
+                <td className="mono text-[11px] text-slate-300">
+                  {exception.best_candidate_id ? (
+                    <div>
+                      {exception.best_candidate_type}:{exception.best_candidate_id}{" "}
+                      <span className="text-slate-500">
+                        {exception.best_candidate_confidence != null ? `${Math.round(exception.best_candidate_confidence * 100)}%` : ""}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-slate-500">—</span>
+                  )}
+                </td>
+                <td className="max-w-[240px] truncate text-[11px] text-slate-400">{exception.explanation}</td>
+                <td className="max-w-[180px] truncate text-[11px] text-slate-400">{exception.suggested_action}</td>
               </tr>
             ))}
-            {rows.length === 0 && <tr><td colSpan={6} className="text-center py-8 text-gray-400 text-sm">No exceptions.</td></tr>}
+            {rows.length === 0 && (
+              <tr>
+                <td colSpan={6} className="px-4 py-8 text-center text-sm text-slate-400">
+                  No exceptions.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

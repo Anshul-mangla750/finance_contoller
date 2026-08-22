@@ -6,9 +6,26 @@ import { AskAgentPage } from "./pages/AskAgent";
 import { ErrorsPage } from "./pages/Errors";
 import { MatchesPage } from "./pages/Matches";
 import { OverviewPage } from "./pages/Overview";
-import type { ReconcileResponse } from "./types";
+import type { ReconcileResponse, View } from "./types";
 
-type View = "overview" | "matches" | "errors" | "ask";
+const VIEW_COPY: Record<View, { title: string; subtitle: string }> = {
+  overview: {
+    title: "Finance Command Center",
+    subtitle: "Observe, understand, decide, act, and verify across cash, settlement, and reconciliation operations.",
+  },
+  matches: {
+    title: "Matching Graph",
+    subtitle: "Inspect deterministic matches, layered fallbacks, and the evidence behind each link.",
+  },
+  errors: {
+    title: "Exception Resolution",
+    subtitle: "Investigate unresolved records, review explanations, and move items through approval.",
+  },
+  ask: {
+    title: "AI Finance Copilot",
+    subtitle: "Ask grounded questions over the current reconciliation run with cited records.",
+  },
+};
 
 export default function App() {
   const [view, setView] = useState<View>("overview");
@@ -24,7 +41,7 @@ export default function App() {
         const latest = await loadLatestRun();
         setData(latest);
       } catch {
-        // no data yet
+        // No previous run yet.
       } finally {
         setLoading(false);
       }
@@ -78,8 +95,8 @@ export default function App() {
     }
   }
 
-  function navigateTo(v: View) {
-    setView(v);
+  function navigateTo(nextView: View) {
+    setView(nextView);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -89,8 +106,16 @@ export default function App() {
     navigateTo(inExceptions ? "errors" : "matches");
   }
 
+  const currentCopy = VIEW_COPY[view];
+
   return (
-    <div className="min-h-screen bg-[#f0f2f5]">
+    <div className="app-shell">
+      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-[-8rem] top-[-6rem] h-[24rem] w-[24rem] rounded-full bg-emerald-500/10 blur-3xl" />
+        <div className="absolute right-[-7rem] top-[6rem] h-[22rem] w-[22rem] rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="absolute bottom-[-10rem] right-[18%] h-[28rem] w-[28rem] rounded-full bg-amber-500/8 blur-3xl" />
+      </div>
+
       <Sidebar
         currentView={view}
         onNavigate={navigateTo}
@@ -99,91 +124,121 @@ export default function App() {
       />
 
       <main className="app-main">
-        {/* Top Bar */}
-        <header className="sticky top-0 z-30 glass border-b border-gray-200/60">
-          <div className="flex items-center justify-between px-6 lg:px-8 py-3.5">
-            <div>
-              <h1 className="text-base font-bold text-gray-900">
-                {view === "overview" && "Dashboard Overview"}
-                {view === "matches" && "Matches & Exceptions"}
-                {view === "errors" && "Error Analysis"}
-                {view === "ask" && "AI Agent"}
-              </h1>
-              <p className="text-[11px] text-gray-500 mt-0.5">
-                {view === "overview" && "Metrics, accuracy, and reconciliation summary"}
-                {view === "matches" && "Matched records and exception audit trail"}
-                {view === "errors" && "What went wrong, where, and why — per exception"}
-                {view === "ask" && "Natural-language Q&A over your reconciliation data"}
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              {data && (
-                <div className="hidden md:flex items-center gap-2 text-[11px] text-gray-500">
-                  <span className="font-mono">{data.kpis.records_processed}</span> records ·
-                  <span className="font-mono text-emerald-600 font-semibold">{Math.round(data.kpis.match_rate * 100)}%</span> matched ·
-                  <span className="font-mono text-red-500 font-semibold">{data.kpis.exception_count}</span> exceptions
-                </div>
-              )}
-              {error && <span className="pill pill-red max-w-[250px] truncate">{error}</span>}
-              <button onClick={() => void handleRun()} disabled={running} className="btn-green">
-                {running ? (
-                  <><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Running...</>
-                ) : (
-                  <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>Run Reconciliation</>
+        <header className="sticky top-0 z-30 border-b border-white/5 bg-slate-950/72 backdrop-blur-xl">
+          <div className="flex flex-col gap-4 px-5 py-4 lg:px-8">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <div className="hero-kicker">Agentic Finance Platform</div>
+                <h1 className="mt-3 text-xl font-extrabold tracking-tight text-white lg:text-2xl" style={{ fontFamily: "Space Grotesk, Inter, system-ui, sans-serif" }}>
+                  {currentCopy.title}
+                </h1>
+                <p className="mt-1 max-w-3xl text-sm text-slate-400">
+                  {currentCopy.subtitle}
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                {data && (
+                  <div className="hidden rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-[11px] text-slate-300 md:flex md:items-center md:gap-2">
+                    <span className="mono text-slate-100">{data.kpis.records_processed}</span>
+                    records
+                    <span className="text-slate-500">|</span>
+                    <span className="mono text-emerald-300">{Math.round(data.kpis.match_rate * 100)}%</span>
+                    matched
+                    <span className="text-slate-500">|</span>
+                    <span className="mono text-rose-300">{data.kpis.exception_count}</span>
+                    exceptions
+                  </div>
                 )}
-              </button>
+                {error && <span className="pill pill-red max-w-[280px] truncate">{error}</span>}
+                <button onClick={() => void handleRun()} disabled={running} className="btn-green">
+                  {running ? "Running..." : "Run Reconciliation"}
+                </button>
+              </div>
+            </div>
+
+            <div className="process-rail">
+              {[
+                { label: "Observe", active: true },
+                { label: "Understand", active: true },
+                { label: "Decide", active: view !== "overview" || Boolean(data) },
+                { label: "Act", active: Boolean(data?.exceptions.length) },
+                { label: "Verify", active: Boolean(data?.kpis.checksum_ok) },
+              ].map((step) => (
+                <span key={step.label} className={`process-pill ${step.active ? "process-pill-active" : ""}`}>
+                  <span className={`badge-dot ${step.active ? "bg-emerald-300" : "bg-slate-500"}`} />
+                  {step.label}
+                </span>
+              ))}
             </div>
           </div>
         </header>
 
-        {/* Content Area — each page renders its OWN content */}
         <div className="page-pad">
-
-          {/* LOADING */}
           {loading && (
             <div className="space-y-4 anim-fade-in">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {[1,2,3,4].map((i) => (
-                  <div key={i} className="solid p-5 anim-shimmer h-28 rounded-2xl" />
+              <div className="grid gap-4 lg:grid-cols-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="solid h-28 rounded-[24px] anim-shimmer" />
                 ))}
               </div>
-              <div className="solid p-8 anim-shimmer h-64 rounded-2xl" />
+              <div className="solid h-72 rounded-[28px] anim-shimmer" />
             </div>
           )}
 
-          {/* NO DATA */}
           {!loading && !data && view === "overview" && (
-            <div className="anim-fade-up space-y-6">
-              <div className="elevated p-8 text-center">
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#10b981] to-[#059669] flex items-center justify-center mb-4 anim-bounce-in">
-                  <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
-                  </svg>
+            <div className="space-y-6 anim-fade-up">
+              <div className="hero-panel p-7 lg:p-10">
+                <div className="relative z-10 max-w-3xl">
+                  <div className="hero-kicker">Finance Command Center</div>
+                  <h2 className="hero-title mt-4">
+                    A live operating surface for reconciliation, settlement review, cash risk, and AI-assisted finance actions.
+                  </h2>
+                  <p className="hero-sub">
+                    Start a reconciliation run to populate the command center, open the copilot for grounded questions, or upload your own bank, ledger, invoice, and bill files.
+                  </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <button onClick={() => void handleRun()} disabled={running} className="btn-green">
+                      {running ? "Preparing..." : "Launch Command Center"}
+                    </button>
+                    <button onClick={() => navigateTo("ask")} className="btn-outline">
+                      Open Copilot
+                    </button>
+                  </div>
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">Welcome to AI Finance Controller</h2>
-                <p className="mt-2 text-sm text-gray-500 max-w-md mx-auto">Click <strong>Run Reconciliation</strong> above to generate synthetic data and process the full batch end-to-end.</p>
               </div>
+
               <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleFolderRun} busy={running} />
             </div>
           )}
 
-          {/* NO DATA — other pages */}
           {!loading && !data && view !== "overview" && (
-            <div className="anim-fade-up">
-              <div className="solid p-12 text-center">
-                <div className="text-4xl mb-3">📊</div>
-                <h3 className="text-lg font-bold text-gray-900">No data yet</h3>
-                <p className="mt-2 text-sm text-gray-500">Run a reconciliation first from the Overview page.</p>
-                <button onClick={() => navigateTo("overview")} className="btn-green mt-4">Go to Overview</button>
+            <div className="solid p-12 text-center anim-fade-up">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-3xl bg-white/5 text-3xl">
+                {view === "matches" ? "↔" : view === "errors" ? "!" : "⌁"}
               </div>
+              <h3 className="text-lg font-bold text-white">No live run yet</h3>
+              <p className="mt-2 text-sm text-slate-400">Run reconciliation from the Command Center to unlock this view.</p>
+              <button onClick={() => navigateTo("overview")} className="btn-green mt-5">
+                Go to Command Center
+              </button>
             </div>
           )}
 
-          {/* HAS DATA — render based on current view */}
           {!loading && data && view === "overview" && (
             <div className="space-y-6 anim-fade-up">
               <ReconciliationIngress onUpload={handleUpload} onRunFromFolder={handleFolderRun} busy={running} />
-              <OverviewPage kpis={data.kpis} accuracy={data.accuracy} onRun={handleRun} running={running} />
+              <OverviewPage
+                kpis={data.kpis}
+                accuracy={data.accuracy}
+                matches={data.matches}
+                exceptions={data.exceptions}
+                onRun={handleRun}
+                onOpenMatches={() => navigateTo("matches")}
+                onOpenErrors={() => navigateTo("errors")}
+                onOpenAsk={() => navigateTo("ask")}
+                running={running}
+              />
             </div>
           )}
 
@@ -209,7 +264,6 @@ export default function App() {
               <AskAgentPage onFocusRecord={handleFocusRecord} />
             </div>
           )}
-
         </div>
       </main>
     </div>

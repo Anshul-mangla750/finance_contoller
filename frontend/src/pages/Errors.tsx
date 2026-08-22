@@ -5,7 +5,7 @@ type Props = { exceptions: ExceptionRow[]; onFocusRecord: (id: string) => void }
 
 export function ErrorsPage({ exceptions, onFocusRecord }: Props) {
   return (
-    <div className="animate-fadeIn">
+    <div className="anim-fade-up">
       <ErrorExplanation exceptions={exceptions} onFocusRecord={onFocusRecord} />
     </div>
   );

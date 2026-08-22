@@ -1,180 +1,343 @@
 import { useMemo, useState } from "react";
 import type { ExceptionRow, MatchRow } from "../types";
 
-type Props = { matches: MatchRow[]; exceptions: ExceptionRow[]; focusedRecordId: string | null; onFocusRecord: (id: string) => void };
+type Props = {
+  matches: MatchRow[];
+  exceptions: ExceptionRow[];
+  focusedRecordId: string | null;
+  onFocusRecord: (id: string) => void;
+};
+
+function percent(value: number) {
+  return `${Math.round(value * 100)}%`;
+}
+
+function layerLabel(layer: number) {
+  if (layer === 1) return { label: "Exact", tone: "pill-green" };
+  if (layer === 2) return { label: "Fuzzy", tone: "pill-blue" };
+  if (layer === 3) return { label: "Composite", tone: "pill-amber" };
+  return { label: "LLM", tone: "pill-purple" };
+}
+
+function statusTone(status: string) {
+  const map: Record<string, string> = {
+    MISSING_RECORD: "pill-red",
+    DUPLICATE: "pill-amber",
+    AMOUNT_MISMATCH: "pill-amber",
+    DATE_MISMATCH: "pill-blue",
+    NEEDS_HUMAN_REVIEW: "pill-purple",
+    LOW_CONFIDENCE: "pill-gray",
+  };
+  return map[status] ?? "pill-gray";
+}
 
 export function MatchesPage({ matches, exceptions, focusedRecordId, onFocusRecord }: Props) {
   const [tab, setTab] = useState<"both" | "matches" | "exceptions">("both");
 
   const matchStats = useMemo(() => {
-    const layers: Record<number, number> = {};
-    const pairs: Record<string, number> = {};
-    for (const m of matches) {
-      layers[m.match_layer] = (layers[m.match_layer] ?? 0) + 1;
-      pairs[m.pair_type ?? "unknown"] = (pairs[m.pair_type ?? "unknown"] ?? 0) + 1;
+    const byLayer: Record<number, number> = {};
+    const byPair: Record<string, number> = {};
+
+    for (const match of matches) {
+      byLayer[match.match_layer] = (byLayer[match.match_layer] ?? 0) + 1;
+      byPair[match.pair_type ?? "unknown"] = (byPair[match.pair_type ?? "unknown"] ?? 0) + 1;
     }
-    return { layers, pairs };
+
+    return { byLayer, byPair };
   }, [matches]);
 
-  const excStats = useMemo(() => {
+  const exceptionStats = useMemo(() => {
     const byReason: Record<string, number> = {};
     const bySource: Record<string, number> = {};
-    for (const e of exceptions) {
-      byReason[e.reason_category] = (byReason[e.reason_category] ?? 0) + 1;
-      bySource[e.source_type] = (bySource[e.source_type] ?? 0) + 1;
+
+    for (const exception of exceptions) {
+      byReason[exception.reason_category] = (byReason[exception.reason_category] ?? 0) + 1;
+      bySource[exception.source_type] = (bySource[exception.source_type] ?? 0) + 1;
     }
+
     return { byReason, bySource };
   }, [exceptions]);
 
+  const dominantLayer = useMemo(() => {
+    const entries = Object.entries(matchStats.byLayer).sort((a, b) => b[1] - a[1]);
+    return entries.length > 0 ? Number(entries[0][0]) : 1;
+  }, [matchStats.byLayer]);
+
+  const summaryCards = [
+    {
+      label: "Matches",
+      value: matches.length.toLocaleString(),
+      sub: "Resolved links across sources",
+      tone: "pill-green",
+    },
+    {
+      label: "Exceptions",
+      value: exceptions.length.toLocaleString(),
+      sub: "Items waiting for review",
+      tone: exceptions.length > 0 ? "pill-amber" : "pill-green",
+    },
+    {
+      label: "Top Layer",
+      value: layerLabel(dominantLayer).label,
+      sub: `${matchStats.byLayer[dominantLayer] ?? 0} matches in the leading layer`,
+      tone: "pill-blue",
+    },
+  ];
+
   return (
     <div className="space-y-6">
-      {/* Summary Banner */}
-      <div className="solid p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 anim-fade-up">
-        <div>
-          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">Reconciliation Results</div>
-          <h2 className="mt-1 text-lg font-bold text-gray-900">
-            <span className="text-emerald-600">{matches.length}</span> matches found · <span className="text-red-500">{exceptions.length}</span> exceptions
-          </h2>
-        </div>
-        <div className="flex gap-2">
-          {(["both", "matches", "exceptions"] as const).map((t) => (
-            <button key={t} onClick={() => setTab(t)}
-              className={`btn-xs ${tab === t ? "btn-dark" : "btn-outline"}`}>
-              {t === "both" ? "Both" : t === "matches" ? `Matches (${matches.length})` : `Exceptions (${exceptions.length})`}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-3 anim-fade-up" style={{ animationDelay: "0.05s" }}>
-        {/* Match Layers */}
-        <div className="solid p-4">
-          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Match Layers</div>
-          <div className="space-y-2">
-            {[{ id: 1, name: "Exact", color: "bg-emerald-500" }, { id: 2, name: "Fuzzy", color: "bg-blue-500" }, { id: 3, name: "Composite", color: "bg-amber-500" }, { id: 4, name: "LLM", color: "bg-purple-500" }].map(({ id, name, color }) => {
-              const count = matchStats.layers[id] ?? 0;
-              const pct = matches.length ? (count / matches.length) * 100 : 0;
-              return (
-                <div key={id} className="flex items-center gap-3">
-                  <span className="text-xs text-gray-600 w-20">{name}</span>
-                  <div className="flex-1 bar-track"><div className={`bar-fill ${color}`} style={{ width: `${pct}%` }} /></div>
-                  <span className="mono text-xs font-bold text-gray-900 w-8 text-right">{count}</span>
-                </div>
-              );
-            })}
+      <div className="hero-panel p-6 lg:p-8 anim-fade-up">
+        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+          <div className="relative z-10">
+            <div className="hero-kicker">Matching Graph</div>
+            <h2 className="hero-title mt-4">Evidence-first reconciliation links</h2>
+            <p className="hero-sub">
+              Review how each match was formed, where the fallback layers were used, and which records still need
+              human attention.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              {[
+                { key: "both", label: "All records" },
+                { key: "matches", label: `Matches (${matches.length})` },
+                { key: "exceptions", label: `Exceptions (${exceptions.length})` },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => setTab(item.key as typeof tab)}
+                  className={`btn-outline btn-xs ${tab === item.key ? "border-emerald-400/40 text-white" : ""}`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
 
-        {/* Match Pairs */}
-        <div className="solid p-4">
-          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">By Pair Type</div>
-          <div className="space-y-2">
-            {Object.entries(matchStats.pairs).map(([pair, count]) => {
-              const pct = matches.length ? (count / matches.length) * 100 : 0;
-              return (
-                <div key={pair} className="flex items-center gap-3">
-                  <span className="text-xs text-gray-600 w-28 truncate">{pair}</span>
-                  <div className="flex-1 bar-track"><div className="bar-fill bg-gray-800" style={{ width: `${pct}%` }} /></div>
-                  <span className="mono text-xs font-bold text-gray-900 w-8 text-right">{count}</span>
+          <div className="grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+            {summaryCards.map((card) => (
+              <div key={card.label} className="surface p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">{card.label}</div>
+                    <div className="mt-2 text-2xl font-extrabold text-white">{card.value}</div>
+                    <div className="mt-1 text-[11px] text-slate-400">{card.sub}</div>
+                  </div>
+                  <span className={`pill ${card.tone}`}>{card.label}</span>
                 </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Exception Breakdown */}
-        <div className="solid p-4">
-          <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500 mb-3">Exception Reasons</div>
-          <div className="space-y-2">
-            {Object.entries(excStats.byReason).sort((a, b) => b[1] - a[1]).map(([reason, count]) => {
-              const pct = exceptions.length ? (count / exceptions.length) * 100 : 0;
-              return (
-                <div key={reason} className="flex items-center gap-3">
-                  <span className="text-xs text-gray-600 w-28 truncate">{reason.replace(/_/g, " ")}</span>
-                  <div className="flex-1 bar-track"><div className="bar-fill bg-red-500" style={{ width: `${pct}%` }} /></div>
-                  <span className="mono text-xs font-bold text-gray-900 w-8 text-right">{count}</span>
-                </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Tables */}
+      <div className="grid gap-6 xl:grid-cols-3">
+        <div className="surface p-5 anim-fade-up">
+          <div className="hero-kicker">Match Layers</div>
+          <h3 className="section-title mt-3">How records were linked</h3>
+          <div className="mt-4 space-y-3">
+            {[1, 2, 3, 4].map((layer) => {
+              const count = matchStats.byLayer[layer] ?? 0;
+              const pct = matches.length > 0 ? (count / matches.length) * 100 : 0;
+              const meta = layerLabel(layer);
+              return (
+                <div key={layer}>
+                  <div className="flex items-center justify-between gap-3 text-[11px] text-slate-400">
+                    <span>{meta.label}</span>
+                    <span className="mono text-slate-200">{count}</span>
+                  </div>
+                  <div className="mt-2 bar-track">
+                    <div
+                      className={`bar-fill ${meta.tone === "pill-green" ? "bg-emerald-400" : meta.tone === "pill-blue" ? "bg-sky-400" : meta.tone === "pill-amber" ? "bg-amber-400" : "bg-cyan-400"}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="surface p-5 anim-fade-up">
+          <div className="hero-kicker">Pair Types</div>
+          <h3 className="section-title mt-3">Source combinations in play</h3>
+          <div className="mt-4 space-y-3">
+            {Object.entries(matchStats.byPair).length > 0 ? (
+              Object.entries(matchStats.byPair)
+                .sort((a, b) => b[1] - a[1])
+                .map(([pair, count]) => {
+                  const pct = matches.length > 0 ? (count / matches.length) * 100 : 0;
+                  return (
+                    <div key={pair}>
+                      <div className="flex items-center justify-between gap-3 text-[11px] text-slate-400">
+                        <span className="truncate pr-2">{pair}</span>
+                        <span className="mono text-slate-200">{count}</span>
+                      </div>
+                      <div className="mt-2 bar-track">
+                        <div className="bar-fill bg-slate-400" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  );
+                })
+            ) : (
+              <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 p-4 text-sm text-slate-400">
+                No matched pairs yet.
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="surface p-5 anim-fade-up">
+          <div className="hero-kicker">Exception Reasons</div>
+          <h3 className="section-title mt-3">Why records are still open</h3>
+          <div className="mt-4 space-y-3">
+            {Object.entries(exceptionStats.byReason).length > 0 ? (
+              Object.entries(exceptionStats.byReason)
+                .sort((a, b) => b[1] - a[1])
+                .map(([reason, count]) => {
+                  const pct = exceptions.length > 0 ? (count / exceptions.length) * 100 : 0;
+                  return (
+                    <div key={reason}>
+                      <div className="flex items-center justify-between gap-3 text-[11px] text-slate-400">
+                        <span className="truncate pr-2">{reason.replace(/_/g, " ")}</span>
+                        <span className="mono text-slate-200">{count}</span>
+                      </div>
+                      <div className="mt-2 bar-track">
+                        <div className="bar-fill bg-rose-400" style={{ width: `${pct}%` }} />
+                      </div>
+                    </div>
+                  );
+                })
+            ) : (
+              <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 p-4 text-sm text-slate-400">
+                No exception reasons to review.
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {(tab === "both" || tab === "matches") && (
-        <div className="anim-slide-right">
-          <div className="pg-head">
-            <h3 className="pg-title text-lg">Matched Records</h3>
-            <p className="pg-sub">Click any record ID to cross-reference</p>
+        <div className="surface overflow-hidden anim-fade-up">
+          <div className="flex flex-col gap-3 border-b border-white/5 p-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="hero-kicker">Matched Records</div>
+              <h3 className="section-title mt-3">Deterministic and fallback links</h3>
+              <p className="section-sub">Click any record ID to jump into the evidence trail.</p>
+            </div>
+            <span className="pill pill-slate">{matches.length} matches</span>
           </div>
-          <div className="solid overflow-hidden">
-            <div className="p-4 border-b border-gray-200 flex flex-wrap gap-2">
-              <div className="text-[11px] text-gray-500">{matches.length} matches</div>
-            </div>
-            <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="min-w-full">
-                <thead className="tbl-head sticky top-0 z-10">
-                  <tr><th>Pair</th><th>Source A</th><th>Source B</th><th>Layer</th><th>Confidence</th><th>Reasoning</th></tr>
-                </thead>
-                <tbody className="tbl-body">
-                  {matches.map((m, i) => {
-                    const layers: Record<number, { n: string; c: string }> = { 1: { n: "Exact", c: "pill-green" }, 2: { n: "Fuzzy", c: "pill-blue" }, 3: { n: "Composite", c: "pill-amber" }, 4: { n: "LLM", c: "pill-purple" } };
-                    const l = layers[m.match_layer] ?? { n: `L${m.match_layer}`, c: "pill-gray" };
-                    return (
-                      <tr key={`${m.pair_type}:${m.source_a_id}:${m.source_b_id}`}
-                        className={`${focusedRecordId && (m.source_a_id.includes(focusedRecordId) || m.source_b_id.includes(focusedRecordId)) ? "bg-amber-50" : ""}`}
-                        style={{ animationDelay: `${Math.min(i * 15, 300)}ms` }}>
-                        <td className="text-[11px] text-gray-500">{m.pair_type}</td>
-                        <td><button className="chip mono text-[10px]" onClick={() => onFocusRecord(m.source_a_id)}>{m.source_a_type}:{m.source_a_id}</button></td>
-                        <td><button className="chip mono text-[10px]" onClick={() => onFocusRecord(m.source_b_id)}>{m.source_b_type}:{m.source_b_id}</button></td>
-                        <td><span className={`pill ${l.c}`}>{l.n}</span></td>
-                        <td>
-                          <div className="flex items-center gap-2">
-                            <div className="bar-track flex-1 max-w-[70px]"><div className="bar-fill" style={{ width: `${m.confidence * 100}%`, backgroundColor: m.confidence >= 0.9 ? "#10b981" : m.confidence >= 0.75 ? "#f59e0b" : "#ef4444" }} /></div>
-                            <span className="mono text-[11px] font-bold text-gray-700 w-8">{Math.round(m.confidence * 100)}%</span>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="tbl-head sticky top-0 z-10">
+                <tr>
+                  <th>Pair</th>
+                  <th>Source A</th>
+                  <th>Source B</th>
+                  <th>Layer</th>
+                  <th>Confidence</th>
+                  <th>Reasoning</th>
+                </tr>
+              </thead>
+              <tbody className="tbl-body">
+                {matches.map((match, index) => {
+                  const meta = layerLabel(match.match_layer);
+                  const highlight =
+                    focusedRecordId &&
+                    (match.source_a_id.includes(focusedRecordId) || match.source_b_id.includes(focusedRecordId));
+
+                  return (
+                    <tr
+                      key={`${match.pair_type}:${match.source_a_id}:${match.source_b_id}`}
+                      className={highlight ? "bg-emerald-500/5" : ""}
+                      style={{ animationDelay: `${Math.min(index * 18, 320)}ms` }}
+                    >
+                      <td className="text-[11px] text-slate-400">{match.pair_type}</td>
+                      <td>
+                        <button className="chip mono text-[10px]" onClick={() => onFocusRecord(match.source_a_id)}>
+                          {match.source_a_type}:{match.source_a_id}
+                        </button>
+                      </td>
+                      <td>
+                        <button className="chip mono text-[10px]" onClick={() => onFocusRecord(match.source_b_id)}>
+                          {match.source_b_type}:{match.source_b_id}
+                        </button>
+                      </td>
+                      <td>
+                        <span className={`pill ${meta.tone}`}>{meta.label}</span>
+                      </td>
+                      <td>
+                        <div className="flex items-center gap-2">
+                          <div className="bar-track flex-1 max-w-[96px]">
+                            <div
+                              className={`bar-fill ${
+                                match.confidence >= 0.9 ? "bg-emerald-400" : match.confidence >= 0.75 ? "bg-amber-400" : "bg-rose-400"
+                              }`}
+                              style={{ width: `${match.confidence * 100}%` }}
+                            />
                           </div>
-                        </td>
-                        <td className="text-[11px] text-gray-500 max-w-[250px] truncate">{m.reasoning}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+                          <span className="mono text-[11px] font-bold text-slate-300">{percent(match.confidence)}</span>
+                        </div>
+                      </td>
+                      <td className="max-w-[340px] truncate text-[11px] text-slate-400">{match.reasoning}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       )}
 
       {(tab === "both" || tab === "exceptions") && (
-        <div className="anim-slide-right" style={{ animationDelay: "0.1s" }}>
-          <div className="pg-head">
-            <h3 className="pg-title text-lg">Exception List</h3>
-            <p className="pg-sub">matched + exceptions = total (per source)</p>
-          </div>
-          <div className="solid overflow-hidden">
-            <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-              <table className="min-w-full">
-                <thead className="tbl-head sticky top-0 z-10">
-                  <tr><th>Source</th><th>Record</th><th>Status</th><th>Best Candidate</th><th>Explanation</th><th>Action</th></tr>
-                </thead>
-                <tbody className="tbl-body">
-                  {exceptions.map((e, i) => {
-                    const sc: Record<string, string> = { MISSING_RECORD: "pill-red", DUPLICATE: "pill-amber", AMOUNT_MISMATCH: "pill-amber", DATE_MISMATCH: "pill-blue", NEEDS_HUMAN_REVIEW: "pill-purple", LOW_CONFIDENCE: "pill-gray" };
-                    return (
-                      <tr key={`${e.source_type}:${e.record_id}`} className={`${focusedRecordId === e.record_id ? "bg-amber-50" : ""}`}>
-                        <td className="font-medium capitalize">{e.source_type}</td>
-                        <td><button className="chip mono text-[10px]" onClick={() => onFocusRecord(e.record_id)}>{e.record_id}</button></td>
-                        <td><span className={`pill ${sc[e.status] ?? "pill-gray"}`}>{(e.status ?? "?").replace(/_/g, " ")}</span></td>
-                        <td className="mono text-[11px]">{e.best_candidate_id ? `${e.best_candidate_type}:${e.best_candidate_id}` : <span className="text-gray-300">—</span>}</td>
-                        <td className="text-[11px] text-gray-500 max-w-[220px] truncate">{e.explanation}</td>
-                        <td className="text-[11px] text-gray-500 max-w-[180px] truncate">{e.suggested_action}</td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+        <div className="surface overflow-hidden anim-fade-up" style={{ animationDelay: "0.06s" }}>
+          <div className="flex flex-col gap-3 border-b border-white/5 p-5 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <div className="hero-kicker">Exception Queue</div>
+              <h3 className="section-title mt-3">Open records waiting for resolution</h3>
+              <p className="section-sub">Each item keeps the human-in-the-loop flow visible.</p>
             </div>
+            <span className="pill pill-amber">{exceptions.length} exceptions</span>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="tbl-head sticky top-0 z-10">
+                <tr>
+                  <th>Source</th>
+                  <th>Record</th>
+                  <th>Status</th>
+                  <th>Best Candidate</th>
+                  <th>Explanation</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody className="tbl-body">
+                {exceptions.map((exception, index) => {
+                  const highlight = focusedRecordId === exception.record_id;
+
+                  return (
+                    <tr
+                      key={`${exception.source_type}:${exception.record_id}`}
+                      className={highlight ? "bg-amber-500/5" : ""}
+                      style={{ animationDelay: `${Math.min(index * 18, 320)}ms` }}
+                    >
+                      <td className="font-medium capitalize text-slate-200">{exception.source_type}</td>
+                      <td>
+                        <button className="chip mono text-[10px]" onClick={() => onFocusRecord(exception.record_id)}>
+                          {exception.record_id}
+                        </button>
+                      </td>
+                      <td>
+                        <span className={`pill ${statusTone(exception.status)}`}>{exception.status.replace(/_/g, " ")}</span>
+                      </td>
+                      <td className="mono text-[11px] text-slate-300">
+                        {exception.best_candidate_id ? `${exception.best_candidate_type}:${exception.best_candidate_id}` : "-"}
+                      </td>
+                      <td className="max-w-[260px] truncate text-[11px] text-slate-400">{exception.explanation}</td>
+                      <td className="max-w-[220px] truncate text-[11px] text-slate-400">{exception.suggested_action}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

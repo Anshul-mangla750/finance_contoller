@@ -4,6 +4,8 @@ export type ConfidenceBucket = {
   actual_accuracy: number;
 };
 
+export type View = "overview" | "matches" | "errors" | "ask";
+
 export type Kpis = {
   records_processed: number;
   match_rate: number;
