@@ -230,127 +230,225 @@ class GeminiClient:
         return best
 
     def _offline_exception_explanation(self, payload: dict[str, Any]) -> ExceptionExplanation:
-        """Generate a detailed, record-specific exception explanation."""
+        """Generate a detailed, record-specific exception explanation with exact deltas."""
         record = payload.get("record", {})
         reason_category = payload.get("reason_category", "unknown")
         best = payload.get("best_candidate")
         record_id = record.get("record_id", "unknown")
-        record_amount = record.get("amount", 0)
+        record_amount = float(record.get("amount", 0))
+        record_text = str(record.get("text", record.get("description", record.get("memo", ""))))
+        record_date = str(record.get("date", ""))
+
+        # Extract best-candidate deltas
+        cand_id = best.get("candidate_id", "N/A") if best else None
+        cand_type = best.get("target_type", "") if best else ""
+        cand_confidence = float(best.get("confidence", 0)) if best else 0.0
+        cand_amount_delta = float(best.get("amount_delta", 0)) if best else 0.0
+        cand_date_gap = int(best.get("date_gap_days", best.get("date_gap", 0))) if best else 0
+        cand_text_sim = float(best.get("text_similarity", 0)) if best else 0.0
+        cand_reasoning = best.get("reasoning", "") if best else ""
 
         explanation = ""
         suggested_action = ""
 
         if reason_category == "missing_counterpart":
             if best:
-                explanation = (
-                    f"Record {record_id} (amount: {abs(record_amount):.2f}) has no confirmed counterpart. "
-                    f"The closest candidate is {best.get('candidate_id', 'N/A')} ({best.get('target_type', 'N/A')}) "
-                    f"with {best.get('confidence', 0)*100:.0f}% confidence, but it didn't meet the matching threshold. "
-                    f"This may be a bank fee, an unrecorded refund, or a posting error."
+                # Build specific explanation based on actual deltas
+                parts = [
+                    f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) has no confirmed match."
+                ]
+                parts.append(
+                    f"Closest candidate: {cand_id} ({cand_type}) at {cand_confidence*100:.0f}% confidence."
                 )
-                suggested_action = (
-                    "Verify if this is a legitimate transaction. Check supporting documents, "
-                    "confirm with the AP/AR team, or create the missing ledger entry if appropriate."
-                )
+                # Explain WHY it failed the threshold
+                if cand_amount_delta > 0:
+                    parts.append(
+                        f"Amount differs by {cand_amount_delta:.2f}"
+                    )
+                else:
+                    parts.append("Amounts match exactly")
+                if cand_date_gap > 0:
+                    parts.append(f"dates are {cand_date_gap} day(s) apart")
+                else:
+                    parts.append("dates are within tolerance")
+                if cand_text_sim > 0:
+                    parts.append(f"description similarity: {cand_text_sim*100:.0f}%")
+                parts.append("— but combined score was below the matching threshold.")
+                explanation = " ".join(parts)
+
+                # Tailor action to the actual gap
+                if cand_amount_delta > 0 and cand_amount_delta <= 50:
+                    suggested_action = (
+                        f"Likely a fee adjustment ({cand_amount_delta:.2f} delta). "
+                        "Check for a bank fee journal entry. If found, approve with adjustment noted."
+                    )
+                elif cand_date_gap > 3:
+                    suggested_action = (
+                        f"Date gap of {cand_date_gap} days suggests weekend/holiday delay. "
+                        "Verify posting dates and approve if this is a normal settlement lag."
+                    )
+                elif cand_text_sim > 0.3:
+                    suggested_action = (
+                        f"Description similarity is {cand_text_sim*100:.0f}% — partial text match found. "
+                        "Compare full records side-by-side to confirm or reject this candidate."
+                    )
+                else:
+                    suggested_action = (
+                        "Review this record against source documents. "
+                        "The closest candidate differs on multiple dimensions."
+                    )
             else:
                 explanation = (
-                    f"Record {record_id} (amount: {abs(record_amount):.2f}) has no counterpart "
-                    f"in any other source. This typically means the transaction was not recorded "
-                    f"in the accounting system, or it is an bank-initiated charge."
+                    f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                    f"has no counterpart in any other source. "
+                    f"Description: '{record_text}'. "
+                    f"This typically means the transaction was not recorded in the accounting system, "
+                    f"or it is a bank-initiated charge (fee, interest, adjustment)."
                 )
-                suggested_action = (
-                    "Check bank statement for supporting documentation. If this is a bank fee, "
-                    "create a journal entry. If unrecognizable, escalate for investigation."
-                )
+                if abs(record_amount) <= 50:
+                    suggested_action = (
+                        f"Amount of {abs(record_amount):.2f} is small — likely a bank fee or service charge. "
+                        "Create a journal entry if legitimate. Escalate if unrecognizable."
+                    )
+                else:
+                    suggested_action = (
+                        "Investigate this transaction. Check bank statement for supporting docs. "
+                        "Create the missing journal entry or escalate for review."
+                    )
 
         elif reason_category == "amount_mismatch":
-            delta = best.get("amount_delta", 0) if best else abs(record_amount)
-            explanation = (
-                f"Record {record_id} has a candidate match {best.get('candidate_id', 'N/A') if best else 'N/A'} "
-                f"but the amounts differ by {delta:.2f}. "
-            )
-            if delta <= 50:
-                explanation += (
-                    "The difference is small and likely represents a processing fee, "
-                    "FX rounding, or a bank charge deducted before settlement."
+            delta = cand_amount_delta
+            if best:
+                explanation = (
+                    f"{record_id} (amount: {abs(record_amount):.2f}) has a candidate match "
+                    f"{cand_id} ({cand_type}), but amounts differ by {delta:.2f}."
                 )
-                suggested_action = (
-                    "Check for fee journal entries or partial settlement postings. "
-                    "If the fee is legitimate, approve the match with the adjustment noted."
-                )
-            elif delta <= 200:
-                explanation += (
-                    "The difference is moderate and could indicate a partial payment, "
-                    "tax withholding, or an unbilled adjustment."
-                )
-                suggested_action = (
-                    "Review supporting invoices and payment records. Check if a partial "
-                    "settlement or tax deduction was applied."
-                )
+                if delta <= 5:
+                    explanation += (
+                        f" The difference of {delta:.2f} is negligible and likely represents "
+                        f"currency rounding. Confidence: {cand_confidence*100:.0f}%."
+                    )
+                    suggested_action = (
+                        f"Round difference of {delta:.2f} — approve the match with a rounding note."
+                    )
+                elif delta <= 50:
+                    explanation += (
+                        f" This small delta ({delta:.2f}) suggests a processing fee, FX conversion, "
+                        f"or bank charge deducted before settlement. Date gap: {cand_date_gap} day(s). "
+                        f"Description similarity: {cand_text_sim*100:.0f}%."
+                    )
+                    suggested_action = (
+                        f"Check for a fee of {delta:.2f} in the ledger. If found, approve with adjustment. "
+                        "If not, create a journal entry for the fee amount."
+                    )
+                elif delta <= 200:
+                    explanation += (
+                        f" The moderate difference ({delta:.2f}) could indicate a partial payment, "
+                        f"tax withholding, or manual adjustment. "
+                        f"Date gap: {cand_date_gap} day(s). Confidence: {cand_confidence*100:.0f}%."
+                    )
+                    suggested_action = (
+                        f"Review invoices for a {delta:.2f} partial payment or tax deduction. "
+                        "Compare the two records side-by-side."
+                    )
+                else:
+                    explanation += (
+                        f" The large difference ({delta:.2f}) suggests these are likely unrelated "
+                        f"transactions. Date gap: {cand_date_gap} day(s). "
+                        f"Text similarity: {cand_text_sim*100:.0f}%."
+                    )
+                    suggested_action = (
+                        "Do not auto-match. These records appear to be different transactions. "
+                        "Verify each independently against source documents."
+                    )
             else:
-                explanation += (
-                    "The difference is significant and suggests these may be entirely "
-                    "different transactions that happen to share some attributes."
+                explanation = (
+                    f"{record_id} (amount: {abs(record_amount):.2f}) has no close candidate "
+                    f"within tolerance. Amount delta to nearest: {delta:.2f}."
                 )
                 suggested_action = (
-                    "Do not auto-match. Verify each record independently against source "
-                    "documents. Consider whether these are related transactions at all."
+                    "No candidate within amount tolerance. "
+                    "Check if this is an orphaned record requiring manual investigation."
                 )
 
         elif reason_category == "duplicate_suspected":
-            explanation = (
-                f"Record {record_id} appears to be a duplicate. "
-            )
             if best:
-                explanation += (
-                    f"The candidate {best.get('candidate_id', 'N/A')} was already matched to another record "
-                    f"with {best.get('confidence', 0)*100:.0f}% confidence. "
+                explanation = (
+                    f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                    f"appears to be a duplicate. Candidate {cand_id} ({cand_type}) "
+                    f"was already matched elsewhere with {cand_confidence*100:.0f}% confidence. "
+                    f"Amount delta: {cand_amount_delta:.2f}, date gap: {cand_date_gap} day(s), "
+                    f"text similarity: {cand_text_sim*100:.0f}%. "
                     f"This suggests the same transaction was entered twice in the system."
                 )
+                suggested_action = (
+                    "Confirm with the accounting team whether this is a genuine duplicate. "
+                    f"If confirmed, void or reverse {record_id}. "
+                    "If not, investigate why two similar records exist in the same source."
+                )
             else:
-                explanation += "A similar record already exists and was matched, suggesting double-entry."
-            suggested_action = (
-                "Confirm with the accounting team whether this is a genuine duplicate. "
-                "If confirmed, void or reverse the duplicate entry. If not, investigate "
-                "why two similar records exist."
-            )
+                explanation = (
+                    f"{record_id} (amount: {abs(record_amount):.2f}) appears to be a duplicate — "
+                    f"a similar record already exists and was matched."
+                )
+                suggested_action = (
+                    "Review both records. If this is a double-entry, void the duplicate."
+                )
 
         elif reason_category == "date_out_of_tolerance":
-            day_gap = best.get("date_gap", 0) if best else 0
-            explanation = (
-                f"Record {record_id} has a potential match ({best.get('candidate_id', 'N/A') if best else 'N/A'}) "
-                f"but the date gap is {day_gap} days, which exceeds the reconciliation window. "
-            )
-            if day_gap <= 14:
-                explanation += (
-                    "This could be a delayed posting, weekend/holiday cutoff, "
-                    "or a batch file processed late."
+            if best:
+                explanation = (
+                    f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                    f"has a potential match {cand_id} ({cand_type}), but the date gap is "
+                    f"{cand_date_gap} day(s) — exceeding the reconciliation window. "
+                    f"Amount delta: {cand_amount_delta:.2f}, confidence: {cand_confidence*100:.0f}%."
                 )
-                suggested_action = (
-                    "Verify the posting dates. If this is a normal settlement delay, "
-                    "approve the match with the date variance noted."
-                )
+                if cand_date_gap <= 7:
+                    explanation += (
+                        f" The {cand_date_gap}-day gap is consistent with weekend/holiday cutoff "
+                        f"or a batch file processed late."
+                    )
+                    suggested_action = (
+                        f"Date gap of {cand_date_gap} days is likely a settlement delay. "
+                        "Verify posting dates. If legitimate, approve with date variance noted."
+                    )
+                elif cand_date_gap <= 14:
+                    explanation += (
+                        f" The {cand_date_gap}-day gap suggests delayed posting or cross-border "
+                        f"settlement lag."
+                    )
+                    suggested_action = (
+                        f"Investigate the {cand_date_gap}-day delay. Check if this is a weekend/holiday "
+                        "cutoff or a cross-border payment lag. Approve if confirmed."
+                    )
+                else:
+                    explanation += (
+                        f" The large {cand_date_gap}-day gap suggests these may be unrelated "
+                        f"transactions or a significant processing error."
+                    )
+                    suggested_action = (
+                        f"Date gap of {cand_date_gap} days is unusual. Investigate source documents "
+                        "for both records. These may not be related."
+                    )
             else:
-                explanation += (
-                    "The large date gap suggests these may be unrelated transactions "
-                    "or a significant processing error."
+                explanation = (
+                    f"{record_id} (date: {record_date}) has no candidate within the date window."
                 )
-                suggested_action = (
-                    "Investigate the source documents for both records. Check if "
-                    "a correction entry was posted much later than the original."
-                )
+                suggested_action = "Check if this record belongs to a different reconciliation period."
 
         elif reason_category == "unresolved_ambiguous":
             explanation = (
-                f"Record {record_id} (amount: {abs(record_amount):.2f}) has multiple plausible "
-                f"candidates but no single match that clears the confidence threshold. "
+                f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                f"has multiple plausible candidates but none clears the confidence threshold."
             )
             if best:
                 explanation += (
-                    f"The best candidate is {best.get('candidate_id', 'N/A')} at "
-                    f"{best.get('confidence', 0)*100:.0f}% confidence, "
-                    f"with {best.get('reasoning', 'some similarity')}."
+                    f" Best candidate: {cand_id} ({cand_type}) at {cand_confidence*100:.0f}% confidence. "
+                    f"Amount delta: {cand_amount_delta:.2f}, date gap: {cand_date_gap} day(s), "
+                    f"text similarity: {cand_text_sim*100:.0f}%."
                 )
+            if record_text:
+                explanation += f" Record text: '{record_text}'."
             suggested_action = (
                 "Review this record manually with supporting documents. "
                 "Compare amounts, dates, and descriptions side-by-side to determine "
@@ -359,21 +457,26 @@ class GeminiClient:
 
         elif reason_category == "low_confidence_llm":
             explanation = (
-                f"Record {record_id} was evaluated by the AI matching system but the "
-                f"confidence score was below the required threshold. "
+                f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                f"was evaluated but confidence was below threshold."
             )
             if best:
                 explanation += (
-                    f"Best candidate: {best.get('candidate_id', 'N/A')} at "
-                    f"{best.get('confidence', 0)*100:.0f}% confidence. "
-                    f"Reason: {best.get('reasoning', 'insufficient evidence')}."
+                    f" Best candidate: {cand_id} ({cand_type}) at {cand_confidence*100:.0f}%. "
+                    f"Amount delta: {cand_amount_delta:.2f}, date gap: {cand_date_gap} day(s), "
+                    f"text similarity: {cand_text_sim*100:.0f}%."
                 )
+                if cand_reasoning:
+                    explanation += f" Engine reasoning: {cand_reasoning}"
             suggested_action = (
                 "This requires human judgment. Review the record against all potential "
                 "counterparts and make a determination based on available documentation."
             )
         else:
-            explanation = f"Record {record_id} is flagged as an exception with category '{reason_category}'."
+            explanation = (
+                f"{record_id} (amount: {abs(record_amount):.2f}, date: {record_date}) "
+                f"flagged as exception with category '{reason_category}'."
+            )
             suggested_action = "Review manually and determine the appropriate action."
 
         return ExceptionExplanation(

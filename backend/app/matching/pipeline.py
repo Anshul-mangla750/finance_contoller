@@ -394,9 +394,19 @@ class ReconciliationPipeline:
     ) -> str:
         if best is None:
             return "missing_counterpart"
-        if best["candidate_id"] in matched_source_ids.get(best["target_type"], set()):
+        # Only flag as duplicate if the candidate is genuinely close —
+        # low-confidence / large-delta candidates that happen to be matched
+        # elsewhere are not duplicates, they're just unmatched records.
+        rec_amount = abs(float(record["amount"]))
+        tolerance = amount_tolerance(rec_amount)
+        is_close_enough = (
+            best["confidence"] >= 0.6
+            and best["amount_delta"] <= tolerance * 2
+            and best["date_gap_days"] <= 10
+        )
+        if best["candidate_id"] in matched_source_ids.get(best["target_type"], set()) and is_close_enough:
             return "duplicate_suspected"
-        if best["amount_delta"] > amount_tolerance(abs(float(record["amount"]))):
+        if best["amount_delta"] > tolerance:
             return "amount_mismatch"
         if best["date_gap_days"] > 5:
             return "date_out_of_tolerance"

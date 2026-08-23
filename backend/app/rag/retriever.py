@@ -42,7 +42,8 @@ def _keyword_boost(question: str, doc: VectorDocument) -> float:
 
     matched_keywords = sum(1 for kw in keywords if kw in text_lower)
     if keywords:
-        boost = min(0.15, matched_keywords / len(keywords) * 0.15)
+        # Return a 0-1 relevance score: proportion of keywords matched
+        boost = matched_keywords / len(keywords) if keywords else 0.0
 
     # Boost for record ID matches
     record_ids = re.findall(r'[A-Z]+-\d{4}', question.upper())
@@ -85,10 +86,33 @@ class Retriever:
 
         # Score each document
         scored: list[dict[str, Any]] = []
+
+        # Detect offline/hashed embeddings (8-dim) — cosine similarity is meaningless
+        use_keyword_only = (
+            not self.client.is_online
+            or len(query_embedding) <= 8
+            or any(len(doc.embedding) <= 8 for doc in docs)
+        )
+
         for doc in docs:
-            cosine_score = _cosine(query_embedding, doc.embedding)
-            keyword_boost = _keyword_boost(question, doc)
-            combined_score = min(1.0, cosine_score + keyword_boost)
+            if use_keyword_only:
+                # Pure keyword-based scoring when embeddings are not real
+                keyword_score = _keyword_boost(question, doc)
+                # Bonus for metadata kind match
+                meta = doc.metadata or {}
+                meta_bonus = 0.0
+                lowered = question.lower()
+                if meta.get("kind") == "exception" and any(w in lowered for w in ["exception", "error", "unmatched", "issue", "wrong"]):
+                    meta_bonus = 0.15
+                if meta.get("kind") == "match" and any(w in lowered for w in ["match", "reconcil", "pair", "linked"]):
+                    meta_bonus = 0.15
+                if meta.get("source_type") == "kpi" and any(w in lowered for w in ["summary", "total", "count", "rate", "cash"]):
+                    meta_bonus = 0.15
+                combined_score = min(1.0, keyword_score + meta_bonus)
+            else:
+                cosine_score = _cosine(query_embedding, doc.embedding)
+                keyword_boost = _keyword_boost(question, doc) * 0.25  # scale down to preserve cosine dominance
+                combined_score = min(1.0, cosine_score + keyword_boost)
 
             scored.append({
                 "id": doc.id,

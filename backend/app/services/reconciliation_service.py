@@ -150,9 +150,9 @@ def _persist_results(
             exception_count=accuracy_payload["exception_count"],
             checksum_ok=accuracy_payload["checksum"]["ok"],
             match_rate=accuracy_payload["overall_match_rate"],
-            precision=accuracy_payload["precision"] or 0.0,
-            recall=accuracy_payload["recall"] or 0.0,
-            f1=accuracy_payload["f1"] or 0.0,
+            precision=accuracy_payload["precision"] if accuracy_payload["precision"] is not None else -1.0,
+            recall=accuracy_payload["recall"] if accuracy_payload["recall"] is not None else -1.0,
+            f1=accuracy_payload["f1"] if accuracy_payload["f1"] is not None else -1.0,
             cash_position=cash_position,
             metrics_json=json.dumps(accuracy_payload, indent=2, sort_keys=True),
         )
@@ -202,9 +202,11 @@ def run_reconciliation_with_bundle(
     with get_session() as session:
         _persist_results(session, pipeline_result.run_id, pipeline_result, accuracy_payload, cash_position, seed or settings.seed)
 
-    # Ingest into RAG index (best-effort)
+    # Ingest into RAG index (best-effort but logged)
+    import logging as _rag_log
+    _rag_logger = _rag_log.getLogger("rag.ingest")
     try:
-        ingest_reconciliation_state(
+        ingest_path = ingest_reconciliation_state(
             bundle.bank_statement,
             bundle.general_ledger,
             bundle.invoices,
@@ -212,8 +214,12 @@ def run_reconciliation_with_bundle(
             pipeline_result.matches,
             pipeline_result.exceptions,
         )
-    except Exception:
-        pass  # RAG indexing is non-critical
+        _rag_logger.info("RAG index written to %s (%d docs)", ingest_path,
+                         len(bundle.bank_statement) + len(bundle.general_ledger) +
+                         len(bundle.invoices) + len(bundle.bills) +
+                         len(pipeline_result.matches) + len(pipeline_result.exceptions))
+    except Exception as exc:
+        _rag_logger.error("RAG ingestion failed: %s", exc, exc_info=True)
 
     response = {
         "run_id": pipeline_result.run_id,

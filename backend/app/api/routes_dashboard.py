@@ -12,6 +12,11 @@ from app.models.schemas import AuditLogRecord, BankTxn, Bill, ExceptionRecord, I
 router = APIRouter(prefix="/api/dashboard", tags=["dashboard"])
 
 
+def _clean_metric(val: float) -> float | None:
+    """Return None for sentinel -1.0 (scoring unavailable) instead of showing 0."""
+    return None if val < 0 else val
+
+
 def _latest_run() -> ReconciliationRun:
     with get_session() as session:
         run = session.exec(select(ReconciliationRun).order_by(ReconciliationRun.created_at.desc())).first()
@@ -23,12 +28,15 @@ def _latest_run() -> ReconciliationRun:
 @router.get("/kpis")
 def get_kpis() -> dict:
     run = _latest_run()
+    def _clean_accuracy(val: float) -> float | None:
+        return None if val < 0 else val
+
     return {
         "records_processed": run.total_records,
         "match_rate": run.match_rate,
-        "precision": run.precision,
-        "recall": run.recall,
-        "f1": run.f1,
+        "precision": _clean_accuracy(run.precision),
+        "recall": _clean_accuracy(run.recall),
+        "f1": _clean_accuracy(run.f1),
         "cash_position": run.cash_position,
         "exception_count": run.exception_count,
         "checksum_ok": run.checksum_ok,
@@ -114,9 +122,9 @@ def get_latest_run() -> dict:
         "kpis": {
             "records_processed": run.total_records,
             "match_rate": run.match_rate,
-            "precision": run.precision,
-            "recall": run.recall,
-            "f1": run.f1,
+            "precision": _clean_metric(run.precision),
+            "recall": _clean_metric(run.recall),
+            "f1": _clean_metric(run.f1),
             "cash_position": run.cash_position,
             "exception_count": run.exception_count,
             "checksum_ok": run.checksum_ok,
@@ -142,8 +150,8 @@ def list_runs() -> dict:
                 "matched_count": r.matched_count,
                 "exception_count": r.exception_count,
                 "match_rate": r.match_rate,
-                "precision": r.precision,
-                "recall": r.recall,
+                "precision": _clean_metric(r.precision),
+                "recall": _clean_metric(r.recall),
                 "cash_position": r.cash_position,
             }
             for r in runs
@@ -164,9 +172,9 @@ def get_run_details(run_id: str) -> dict:
         "kpis": {
             "records_processed": run.total_records,
             "match_rate": run.match_rate,
-            "precision": run.precision,
-            "recall": run.recall,
-            "f1": run.f1,
+            "precision": _clean_metric(run.precision),
+            "recall": _clean_metric(run.recall),
+            "f1": _clean_metric(run.f1),
             "cash_position": run.cash_position,
             "exception_count": run.exception_count,
             "checksum_ok": run.checksum_ok,
