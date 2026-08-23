@@ -1,4 +1,4 @@
-import type { ErrorExplanationResponse, QAResponse, ReconcileResponse } from "./types";
+import type { AuditLogResponse, ErrorExplanationResponse, QAResponse, ReconcileResponse } from "./types";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ?? "";
 
@@ -131,4 +131,8 @@ export function reviewException(payload: {
     method: "POST",
     body: JSON.stringify(payload),
   });
+}
+
+export function fetchAuditLogs(limit = 5): Promise<AuditLogResponse> {
+  return requestJson<AuditLogResponse>(apiUrl(`/api/dashboard/audit-logs?limit=${encodeURIComponent(limit)}`));
 }

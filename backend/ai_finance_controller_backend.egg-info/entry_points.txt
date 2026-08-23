@@ -1,0 +1,2 @@
+[console_scripts]
+reconcile = app.settlement.cli:main

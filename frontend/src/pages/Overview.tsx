@@ -50,65 +50,65 @@ export function OverviewPage({ kpis, accuracy, matches, exceptions, onRun, onOpe
 
     const agents = [
       {
-        name: "Reconciliation Agent",
-        status: kpis.checksum_ok && kpis.match_rate >= 0.9 ? "Stable" : "Needs attention",
+        name: "Reconciliation Engine",
+        status: kpis.checksum_ok && kpis.match_rate >= 0.9 ? "Stable" : "Attention Needed",
         tone: (kpis.checksum_ok && kpis.match_rate >= 0.9 ? "green" : "amber") as RiskTone,
-        detail: `${kpis.records_processed.toLocaleString()} records scanned and ${percent(kpis.match_rate)} matched.`,
+        detail: `${kpis.records_processed.toLocaleString()} records processed with ${percent(kpis.match_rate)} match rate.`,
         confidence: Math.round(Math.max(kpis.precision, kpis.recall) * 100),
       },
       {
-        name: "Settlement Intelligence Agent",
-        status: settlementIssues > 0 ? "Investigating" : "Monitoring",
+        name: "Settlement Monitor",
+        status: settlementIssues > 0 ? "Discrepancies Flagged" : "Balanced",
         tone: (settlementIssues > 0 ? "amber" : "green") as RiskTone,
-        detail: `${settlementIssues} settlement-related exceptions surfaced in the current run.`,
+        detail: `${settlementIssues} settlement exceptions surfaced in latest batch.`,
         confidence: Math.max(55, 100 - settlementIssues * 10),
       },
       {
-        name: "Cash Flow Agent",
-        status: kpis.cash_position < 0 ? "Cash risk" : kpis.cash_position < 10000 ? "Watchlist" : "Healthy",
+        name: "Liquidity Agent",
+        status: kpis.cash_position < 0 ? "Deficit Risk" : kpis.cash_position < 10000 ? "Watchlist" : "Solvent",
         tone: (kpis.cash_position < 0 ? "red" : kpis.cash_position < 10000 ? "amber" : "green") as RiskTone,
-        detail: `${kpis.cash_position < 0 ? "Negative" : "Positive"} cash position of ${currency(Math.abs(kpis.cash_position))}.`,
+        detail: `${kpis.cash_position < 0 ? "Negative balance" : "Positive position"} of ${currency(Math.abs(kpis.cash_position))}.`,
         confidence: cashRiskScore >= 80 ? 90 : 72,
       },
       {
-        name: "Tax Intelligence Agent",
-        status: taxIssues > 0 ? "Review required" : "Ready",
+        name: "Compliance & Tax Audit",
+        status: taxIssues > 0 ? "Review Required" : "Compliant",
         tone: (taxIssues > 0 ? "amber" : "blue") as RiskTone,
-        detail: `${taxIssues} tax-sensitive items found in the current evidence trail.`,
+        detail: `${taxIssues} tax-sensitive line items identified for verification.`,
         confidence: taxIssues > 0 ? 78 : 86,
       },
     ];
 
     const radar = [
       {
-        label: "Payment Risk",
+        label: "Payment Variance Risk",
         score: Math.min(100, paymentIssues * 28 + Math.round((1 - kpis.precision) * 100 * 0.45)),
-        reason: paymentIssues > 0 ? `${paymentIssues} duplicate or missing-payment signals.` : "No payment anomaly cluster detected.",
-        action: "Inspect duplicate or missing-payment candidates.",
+        reason: paymentIssues > 0 ? `${paymentIssues} duplicate or uncollected payment anomalies.` : "No payment anomaly cluster detected.",
+        action: "Inspect missing payment records",
       },
       {
         label: "Settlement Risk",
         score: Math.min(100, settlementIssues * 24 + (kpis.checksum_ok ? 8 : 34)),
-        reason: kpis.checksum_ok ? "Checksum is green, but settlement mismatches still need review." : "Checksum failed and settlement variance increased.",
-        action: "Open settlement discrepancy queue.",
+        reason: kpis.checksum_ok ? "Arithmetic checksum green; settlement variances pending review." : "Checksum failure detected; variance expanded.",
+        action: "Review settlement queue",
       },
       {
-        label: "Cash Risk",
+        label: "Cash Runway Risk",
         score: cashRiskScore,
-        reason: kpis.cash_position < 0 ? "Current cash position is below zero." : "Cash remains positive, but runway needs monitoring.",
-        action: "Review the forecast and upcoming obligations.",
+        reason: kpis.cash_position < 0 ? "Net liquidity is below zero threshold." : "Cash reserve positive; monitoring ongoing liabilities.",
+        action: "Monitor obligations timeline",
       },
       {
-        label: "Tax Risk",
+        label: "Tax Classification Risk",
         score: Math.min(100, taxIssues * 30 + Math.round(exceptions.length * 0.4)),
-        reason: taxIssues > 0 ? "Tax-sensitive evidence requires classification review." : "No explicit tax exception cluster in the current batch.",
-        action: "Run tax-line review on flagged items.",
+        reason: taxIssues > 0 ? "Tax deduction evidence requires auditor classification." : "No tax classification exceptions in current batch.",
+        action: "Perform tax line review",
       },
       {
-        label: "Operational Risk",
+        label: "Operational Discrepancy Risk",
         score: totalRisk,
-        reason: `${exceptions.length} unresolved exceptions are waiting for resolution.`,
-        action: "Move exceptions through approval.",
+        reason: `${exceptions.length} open exception items awaiting resolution.`,
+        action: "Process exception queue",
       },
     ];
 
@@ -117,34 +117,34 @@ export function OverviewPage({ kpis, accuracy, matches, exceptions, onRun, onOpe
       title: exc.suggested_action,
       reason: exc.explanation,
       confidence: exc.best_candidate_confidence != null ? Math.round(exc.best_candidate_confidence * 100) : Math.round(kpis.precision * 100),
-      candidate: exc.best_candidate_id ? `${exc.best_candidate_type}:${exc.best_candidate_id}` : "No candidate yet",
+      candidate: exc.best_candidate_id ? `${exc.best_candidate_type}:${exc.best_candidate_id}` : "No candidate",
       status: exc.status.replace(/_/g, " "),
     }));
 
     const recentEvents = [
       {
-        time: "Live",
-        agent: "Reconciliation Agent",
-        action: `${kpis.records_processed} records processed`,
-        status: kpis.match_rate >= 0.9 ? "Balanced" : "Review",
+        time: "CURRENT",
+        agent: "Reconciliation Engine",
+        action: `Processed batch of ${kpis.records_processed} ledger entries`,
+        status: kpis.match_rate >= 0.9 ? "BALANCED" : "REVIEW",
       },
       {
-        time: "Live",
-        agent: "Settlement Intelligence Agent",
-        action: `${settlementIssues} settlement issues detected`,
-        status: kpis.checksum_ok ? "Verified" : "Investigating",
+        time: "CURRENT",
+        agent: "Settlement Monitor",
+        action: `Surfaced ${settlementIssues} settlement discrepancies`,
+        status: kpis.checksum_ok ? "VERIFIED" : "INVESTIGATING",
       },
       {
-        time: "Live",
-        agent: "Exception Resolution Agent",
-        action: `${exceptions.length} approvals waiting`,
-        status: exceptions.length > 0 ? "Awaiting approval" : "Clear",
+        time: "CURRENT",
+        agent: "Exception Resolution Flow",
+        action: `${exceptions.length} items queued for auditor review`,
+        status: exceptions.length > 0 ? "PENDING REVIEW" : "CLEAR",
       },
       {
-        time: "Live",
-        agent: "AI Finance Copilot",
-        action: "Ready for grounded, cited questions",
-        status: "Online",
+        time: "CURRENT",
+        agent: "Audit Intelligence",
+        action: "Grounded retrieval index active for live batch queries",
+        status: "ACTIVE",
       },
     ];
 
@@ -153,256 +153,233 @@ export function OverviewPage({ kpis, accuracy, matches, exceptions, onRun, onOpe
 
   return (
     <div className="space-y-6">
+      {/* Executive Command Center Summary Panel */}
       <div className="hero-panel p-6 lg:p-8 anim-fade-up">
-        <div className="grid gap-8 xl:grid-cols-[1.25fr_0.75fr]">
-          <div className="relative z-10">
-            <div className="hero-kicker">Finance Command Center</div>
-            <h2 className="hero-title mt-4">
-              An agentic surface for reconciliation, settlement review, cash monitoring, tax review, and human-approved finance actions.
+        <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="hero-kicker">CONTROL CENTER</span>
+              <span className="pill pill-slate text-[10px]">BATCH ID #REC-2026-823</span>
+            </div>
+            <h2 className="hero-title mt-3">
+              Institutional Financial Control & Reconciliation Platform
             </h2>
             <p className="hero-sub">
-              The dashboard turns the current reconciliation run into an operating picture: it surfaces exceptions, explains evidence, and routes sensitive actions through approval instead of automatic execution.
+              Automated deterministic matching, cross-ledger checksum audit, settlement variance tracking, and human-in-the-loop exception approval.
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button onClick={onRun} disabled={running} className="btn-green">
-                {running ? "Running..." : "Run reconciliation"}
+            <div className="mt-6 flex flex-wrap gap-2.5">
+              <button onClick={onRun} disabled={running} className="btn-primary">
+                {running ? "Processing Batch..." : "Run Reconciliation Batch"}
               </button>
               <button onClick={onOpenErrors} className="btn-outline">
-                Review exceptions
+                Review Exceptions ({exceptions.length})
               </button>
               <button onClick={onOpenAsk} className="btn-ghost">
-                Ask finance copilot
+                Open Audit Copilot
               </button>
-            </div>
-            <div className="mt-7 process-rail">
-              {[
-                { label: "Observe", active: true },
-                { label: "Understand", active: true },
-                { label: "Decide", active: accuracy.available },
-                { label: "Act", active: exceptions.length > 0 },
-                { label: "Verify", active: kpis.checksum_ok },
-              ].map((step) => (
-                <span key={step.label} className={`process-pill ${step.active ? "process-pill-active" : ""}`}>
-                  <span className={`badge-dot ${step.active ? "bg-emerald-300" : "bg-slate-500"}`} />
-                  {step.label}
-                </span>
-              ))}
             </div>
           </div>
 
-          <div className="relative z-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-            <div className="surface p-5">
+          <div className="space-y-3">
+            <div className="surface p-4">
               <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500">Financial Health</div>
-                  <div className="mt-1 text-xl font-bold text-white">Operational signal</div>
-                </div>
-                <span className={`pill ${kpis.checksum_ok ? "pill-green" : "pill-red"}`}>{kpis.checksum_ok ? "Verified" : "Needs review"}</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">BATCH INTEGRITY</span>
+                <span className={`pill ${kpis.checksum_ok ? "pill-green" : "pill-red"}`}>
+                  {kpis.checksum_ok ? "CHECKSUM PASSED" : "CHECKSUM FAILED"}
+                </span>
               </div>
-              <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500">Available balance</div>
-                  <div className="mt-1 text-lg font-bold text-white">{currency(kpis.cash_position)}</div>
+              <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+                <div className="rounded border border-[#1f2736] bg-[#0e121a] p-2.5">
+                  <div className="text-[10px] uppercase text-slate-400">Available Liquidity</div>
+                  <div className="mt-1 font-mono text-base font-bold text-white">{currency(kpis.cash_position)}</div>
                 </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500">Reconciliation rate</div>
-                  <div className="mt-1 text-lg font-bold text-white">{percent(kpis.match_rate)}</div>
+                <div className="rounded border border-[#1f2736] bg-[#0e121a] p-2.5">
+                  <div className="text-[10px] uppercase text-slate-400">Reconciliation Rate</div>
+                  <div className="mt-1 font-mono text-base font-bold text-emerald-400">{percent(kpis.match_rate)}</div>
                 </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500">Unresolved exceptions</div>
-                  <div className="mt-1 text-lg font-bold text-white">{kpis.exception_count.toLocaleString()}</div>
+                <div className="rounded border border-[#1f2736] bg-[#0e121a] p-2.5">
+                  <div className="text-[10px] uppercase text-slate-400">Open Exceptions</div>
+                  <div className="mt-1 font-mono text-base font-bold text-amber-400">{kpis.exception_count.toLocaleString()}</div>
                 </div>
-                <div className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                  <div className="text-[10px] uppercase tracking-wider text-slate-500">Confidence</div>
-                  <div className="mt-1 text-lg font-bold text-white">{Math.round(kpis.f1 * 100)}%</div>
+                <div className="rounded border border-[#1f2736] bg-[#0e121a] p-2.5">
+                  <div className="text-[10px] uppercase text-slate-400">Model F1 Accuracy</div>
+                  <div className="mt-1 font-mono text-base font-bold text-blue-400">{Math.round(kpis.f1 * 100)}%</div>
                 </div>
-              </div>
-            </div>
-
-            <div className="surface p-5">
-              <div className="text-[10px] font-bold uppercase tracking-[0.25em] text-slate-500">Agent status</div>
-              <div className="mt-3 space-y-3">
-                {insight.agents.map((agent) => (
-                  <div key={agent.name} className="rounded-2xl border border-white/5 bg-white/5 p-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <div className="text-sm font-semibold text-white">{agent.name}</div>
-                        <div className="mt-1 text-xs text-slate-400">{agent.detail}</div>
-                      </div>
-                      <span className={`pill ${toneClass(agent.tone)}`}>{agent.status}</span>
-                    </div>
-                    <div className="mt-3 flex items-center gap-2">
-                      <div className="bar-track flex-1">
-                        <div className={`bar-fill ${agent.tone === "green" ? "bg-emerald-400" : agent.tone === "amber" ? "bg-amber-400" : agent.tone === "red" ? "bg-rose-400" : "bg-sky-400"}`} style={{ width: `${agent.confidence}%` }} />
-                      </div>
-                      <span className="mono text-[11px] text-slate-400">{agent.confidence}%</span>
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="surface p-6 anim-fade-up" style={{ animationDelay: "0.05s" }}>
+      {/* KPI Cards Grid */}
+      <div className="surface p-5 anim-fade-up">
         <div className="section-head">
           <div>
-            <div className="hero-kicker">Financial Health</div>
-            <h3 className="section-title mt-3">Current batch signal</h3>
-            <p className="section-sub">The values below come directly from the latest reconciliation run.</p>
+            <div className="hero-kicker">BATCH METRICS</div>
+            <h3 className="section-title mt-1">Live Financial Operational Metrics</h3>
           </div>
         </div>
         <KPICards kpis={kpis} />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+      {/* Main Operating Grid */}
+      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-6">
-          <div className="surface p-6 anim-fade-up" style={{ animationDelay: "0.08s" }}>
+          {/* Operational Engine Modules */}
+          <div className="surface p-5 anim-fade-up">
             <div className="section-head">
               <div>
-                <div className="hero-kicker">Active Finance Agents</div>
-                <h3 className="section-title mt-3">Operational layer</h3>
-                <p className="section-sub">Each agent interprets the current batch and routes human review when needed.</p>
+                <div className="hero-kicker">OPERATIONAL ENGINES</div>
+                <h3 className="section-title mt-1">Automated Reconciliation & Audit Services</h3>
               </div>
             </div>
-            <div className="grid gap-4 lg:grid-cols-2">
-              {insight.agents.map((agent, index) => (
-                <div key={agent.name} className="agent-card anim-fade-up" style={{ animationDelay: `${index * 70}ms` }}>
-                  <div className="flex items-start gap-4">
-                    <div className="agent-sigil">
-                      <div className={`badge-dot ${agent.tone === "green" ? "bg-emerald-300" : agent.tone === "amber" ? "bg-amber-300" : agent.tone === "red" ? "bg-rose-300" : "bg-sky-300"}`} />
+            <div className="grid gap-3 lg:grid-cols-2">
+              {insight.agents.map((agent) => (
+                <div key={agent.name} className="agent-card surface-subtle">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="text-sm font-semibold text-white">{agent.name}</div>
+                      <div className="mt-0.5 text-xs text-slate-400">{agent.detail}</div>
                     </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="text-base font-bold text-white">{agent.name}</div>
-                          <div className="mt-1 text-sm text-slate-400">{agent.detail}</div>
-                        </div>
-                        <span className={`pill ${toneClass(agent.tone)}`}>{agent.status}</span>
-                      </div>
-                      <div className="mt-4 flex items-center justify-between text-xs text-slate-400">
-                        <span>Confidence</span>
-                        <span className="mono text-slate-200">{agent.confidence}%</span>
-                      </div>
-                      <div className="mt-2 bar-track">
-                        <div className={`bar-fill ${agent.tone === "green" ? "bg-emerald-400" : agent.tone === "amber" ? "bg-amber-400" : agent.tone === "red" ? "bg-rose-400" : "bg-sky-400"}`} style={{ width: `${agent.confidence}%` }} />
-                      </div>
-                    </div>
+                    <span className={`pill ${toneClass(agent.tone)} text-[10px]`}>{agent.status}</span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
+                    <span>Engine Confidence:</span>
+                    <span className="mono font-bold text-slate-200">{agent.confidence}%</span>
+                  </div>
+                  <div className="mt-1.5 bar-track">
+                    <div
+                      className={`bar-fill ${
+                        agent.tone === "green"
+                          ? "bg-emerald-500"
+                          : agent.tone === "amber"
+                          ? "bg-amber-500"
+                          : agent.tone === "red"
+                          ? "bg-rose-500"
+                          : "bg-blue-500"
+                      }`}
+                      style={{ width: `${agent.confidence}%` }}
+                    />
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="surface p-6 anim-fade-up" style={{ animationDelay: "0.12s" }}>
+          {/* Human-in-the-Loop Approval Queue */}
+          <div className="surface p-5 anim-fade-up">
             <div className="section-head">
               <div>
-                <div className="hero-kicker">Actions Awaiting Approval</div>
-                <h3 className="section-title mt-3">Human-in-the-loop queue</h3>
-                <p className="section-sub">Sensitive items stay in review until a human confirms the action.</p>
+                <div className="hero-kicker">APPROVAL QUEUE</div>
+                <h3 className="section-title mt-1">Actions Awaiting Auditor Confirmation</h3>
+                <p className="section-sub">Discrepancies flagged for human review before ledger settlement posting.</p>
               </div>
               <button onClick={onOpenErrors} className="btn-outline btn-xs">
-                Open queue
+                View Full Queue ({exceptions.length})
               </button>
             </div>
 
             <div className="space-y-3">
               {insight.approvalQueue.length > 0 ? (
                 insight.approvalQueue.map((item) => (
-                  <div key={item.record} className="approval-card">
-                    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                      <div className="space-y-2">
+                  <div key={item.record} className="approval-card surface-subtle">
+                    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+                      <div className="space-y-1.5 min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="pill pill-slate mono">{item.record}</span>
-                          <span className="pill pill-amber">{item.status}</span>
+                          <span className="chip mono text-[10px]">{item.record}</span>
+                          <span className="pill pill-amber text-[10px]">{item.status}</span>
+                          <span className="text-xs text-slate-400">Confidence: {item.confidence}%</span>
                         </div>
-                        <div className="text-base font-semibold text-white">{item.title}</div>
-                        <p className="max-w-3xl text-sm leading-6 text-slate-400">{item.reason}</p>
-                        <div className="flex flex-wrap gap-2 text-[11px] text-slate-400">
-                          <span className="rounded-full border border-white/5 bg-white/5 px-2.5 py-1">Confidence: {item.confidence}%</span>
-                          <span className="rounded-full border border-white/5 bg-white/5 px-2.5 py-1">Evidence: {item.candidate}</span>
-                        </div>
+                        <div className="text-xs font-semibold text-white">{item.title}</div>
+                        <p className="text-xs leading-relaxed text-slate-300">{item.reason}</p>
+                        {item.candidate !== "No candidate" && (
+                          <div className="text-[11px] text-slate-400">
+                            Suggested Match: <span className="mono text-slate-200">{item.candidate}</span>
+                          </div>
+                        )}
                       </div>
-                      <div className="flex shrink-0 flex-wrap gap-2">
-                        <button onClick={onOpenErrors} className="btn-green btn-xs">
-                          Review
+                      <div className="flex shrink-0 items-center gap-2">
+                        <button onClick={onOpenErrors} className="btn-primary btn-xs">
+                          Review Evidence
                         </button>
                         <button onClick={onOpenMatches} className="btn-outline btn-xs">
-                          Inspect evidence
-                        </button>
-                        <button onClick={onOpenAsk} className="btn-ghost btn-xs">
-                          Ask copilot
+                          Graph
                         </button>
                       </div>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="rounded-2xl border border-dashed border-white/10 bg-white/3 p-6 text-sm text-slate-400">
-                  No approvals are waiting right now. The queue will populate as new exceptions arrive.
+                <div className="rounded border border-dashed border-[#2b364a] p-4 text-center text-xs text-slate-400">
+                  No open approvals pending. All exception items are resolved or cleared.
                 </div>
               )}
             </div>
           </div>
 
-          <div className="surface p-6 anim-fade-up" style={{ animationDelay: "0.16s" }}>
+          {/* Activity Log */}
+          <div className="surface p-5 anim-fade-up">
             <div className="section-head">
               <div>
-                <div className="hero-kicker">Agent Activity</div>
-                <h3 className="section-title mt-3">Live operational timeline</h3>
-                <p className="section-sub">A compact log of what the agents are doing in the current batch.</p>
+                <div className="hero-kicker">AUDIT TIMELINE</div>
+                <h3 className="section-title mt-1">Reconciliation System Operational Log</h3>
               </div>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {insight.recentEvents.map((event, index) => (
-                <div key={`${event.agent}-${index}`} className="timeline-card">
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="flex items-start gap-4">
-                      <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-2xl border border-white/5 bg-white/5 text-[11px] font-bold text-slate-200">
-                        {event.time}
-                      </div>
-                      <div>
-                        <div className="text-sm font-semibold text-white">{event.agent}</div>
-                        <div className="mt-1 text-sm text-slate-400">{event.action}</div>
-                      </div>
+                <div key={`${event.agent}-${index}`} className="flex items-center justify-between gap-3 border-b border-[#1f2736]/60 pb-2 text-xs">
+                  <div className="flex items-center gap-3">
+                    <span className="mono text-[10px] font-semibold text-slate-400 bg-[#0e121a] px-2 py-0.5 rounded border border-[#1f2736]">
+                      {event.time}
+                    </span>
+                    <div>
+                      <span className="font-semibold text-white">{event.agent}:</span>{" "}
+                      <span className="text-slate-300">{event.action}</span>
                     </div>
-                    <span className="pill pill-blue">{event.status}</span>
                   </div>
+                  <span className="pill pill-blue text-[10px]">{event.status}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
+        {/* Right Sidebar: Risk Radar & Calibration */}
         <div className="space-y-6">
-          <div className="surface p-6 anim-fade-up" style={{ animationDelay: "0.1s" }}>
+          <div className="surface p-5 anim-fade-up">
             <div className="section-head">
               <div>
-                <div className="hero-kicker">Financial Risk Radar</div>
-                <h3 className="section-title mt-3">Risk monitoring</h3>
-                <p className="section-sub">A quick read on where the run needs attention next.</p>
+                <div className="hero-kicker">RISK ASSESSMENT</div>
+                <h3 className="section-title mt-1">Financial Operational Risk Matrix</h3>
               </div>
             </div>
             <div className="space-y-3">
               {insight.radar.map((item) => {
                 const severity = severityLabel(item.score);
                 return (
-                  <div key={item.label} className="risk-card">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <div className="text-sm font-semibold text-white">{item.label}</div>
-                        <div className="mt-1 text-xs text-slate-400">{item.reason}</div>
-                      </div>
-                      <span className={`pill ${toneClass(severity.tone)}`}>{severity.label}</span>
+                  <div key={item.label} className="risk-card surface-subtle">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-xs font-semibold text-white">{item.label}</span>
+                      <span className={`pill ${toneClass(severity.tone)} text-[10px]`}>{severity.label}</span>
                     </div>
-                    <div className="mt-3 flex items-center gap-2">
+                    <div className="mt-2 flex items-center gap-2">
                       <div className="bar-track flex-1">
-                        <div className={`bar-fill ${severity.tone === "green" ? "bg-emerald-400" : severity.tone === "amber" ? "bg-amber-400" : severity.tone === "red" ? "bg-rose-400" : "bg-sky-400"}`} style={{ width: `${item.score}%` }} />
+                        <div
+                          className={`bar-fill ${
+                            severity.tone === "green"
+                              ? "bg-emerald-500"
+                              : severity.tone === "amber"
+                              ? "bg-amber-500"
+                              : severity.tone === "red"
+                              ? "bg-rose-500"
+                              : "bg-blue-500"
+                          }`}
+                          style={{ width: `${item.score}%` }}
+                        />
                       </div>
-                      <span className="mono text-xs text-slate-300">{item.score}</span>
+                      <span className="mono text-xs font-bold text-slate-200">{item.score}/100</span>
                     </div>
-                    <div className="mt-3 text-xs text-slate-500">{item.action}</div>
+                    <p className="mt-1.5 text-[11px] text-slate-400">{item.reason}</p>
                   </div>
                 );
               })}

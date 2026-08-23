@@ -426,7 +426,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         add_truth(bill_id, "bill", "clean_match", [{"source_type": "ledger", "record_id": ledger["entry_id"]}])
 
     # Fill the remaining invoices and bills with legitimate orphans.
-    while len(invoices) < 20:
+    while len(invoices) < 60:
         invoice_id = next_invoice_id()
         issue_date = base_date + timedelta(days=180 + len(invoices))
         due_date = issue_date + timedelta(days=30)
@@ -443,7 +443,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         )
         add_truth(invoice_id, "invoice", "orphan_ledger", [])
 
-    while len(bills) < 20:
+    while len(bills) < 60:
         bill_id = next_bill_id()
         issue_date = base_date + timedelta(days=180 + len(bills))
         due_date = issue_date + timedelta(days=30)

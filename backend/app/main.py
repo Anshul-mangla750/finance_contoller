@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes_dashboard import router as dashboard_router
 from app.api.routes_qa import router as qa_router
 from app.api.routes_reconcile import router as reconcile_router
+from app.api.routes_settlement import router as settlement_router
 from app.config import get_settings
 from app.db import init_db
 
@@ -30,5 +31,6 @@ app.add_middleware(
 )
 
 app.include_router(reconcile_router)
+app.include_router(settlement_router)
 app.include_router(dashboard_router)
 app.include_router(qa_router)

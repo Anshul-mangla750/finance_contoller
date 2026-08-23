@@ -120,3 +120,20 @@ export type ReconcileResponse = {
   matches: MatchRow[];
   exceptions: ExceptionRow[];
 };
+
+export type AuditLogRow = {
+  id?: number;
+  run_id?: string | null;
+  record_id?: string | null;
+  action: string;
+  actor?: string | null;
+  timestamp: string;
+  comment?: string | null;
+  previous_state?: string | null;
+  new_state?: string | null;
+};
+
+export type AuditLogResponse = {
+  total: number;
+  items: AuditLogRow[];
+};

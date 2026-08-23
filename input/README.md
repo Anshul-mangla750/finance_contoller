@@ -1,13 +1,12 @@
 # Input Folder Mode
 
-Drop your reconciliation files in this folder and rerun without uploading multipart files.
+Drop the three settlement reconciliation files in this folder and point the CLI or API at the directory.
 
 Expected filenames:
 
-- `bank_statement.json` or `bank_statement.csv`
-- `general_ledger.json` or `general_ledger.csv`
-- `invoices.json` or `invoices.csv`
-- `bills.json` or `bills.csv`
-- optional `ground_truth.json`
+- `settlement_report.csv` or `settlement_report.xlsx`
+- `bank_statement.csv` or `bank_statement.xlsx`
+- `order_ledger.csv` or `order_ledger.xlsx`
+- optional `ground_truth.csv`
 
-You can run the backend folder mode endpoint with the default `input/` folder, or point it at another local directory when needed.
+The loader auto-detects the source role from the headers, so the column names can vary between providers as long as the underlying fields are present.

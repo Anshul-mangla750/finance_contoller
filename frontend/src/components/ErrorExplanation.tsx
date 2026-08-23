@@ -4,13 +4,13 @@ import type { ErrorExplanationResponse, ExceptionGroup, ExceptionRow, GroundedEx
 
 type Props = { exceptions: ExceptionRow[]; onFocusRecord: (id: string) => void };
 
-const META: Record<string, { label: string; desc: string; icon: string; border: string }> = {
-  missing_counterpart: { label: "Missing Counterpart", desc: "No matching record found in another source.", icon: "Search", border: "border-l-rose-500" },
-  amount_mismatch: { label: "Amount Mismatch", desc: "Amount differs beyond tolerance.", icon: "Amount", border: "border-l-amber-500" },
-  duplicate_suspected: { label: "Suspected Duplicates", desc: "Potential duplicate entries detected.", icon: "Dup", border: "border-l-orange-500" },
-  date_out_of_tolerance: { label: "Date Out of Range", desc: "Date gap exceeds the matching window.", icon: "Date", border: "border-l-sky-500" },
-  unresolved_ambiguous: { label: "Ambiguous", desc: "Multiple candidates, no confident answer.", icon: "?", border: "border-l-cyan-500" },
-  low_confidence_llm: { label: "Low Confidence", desc: "Below the confidence threshold.", icon: "Low", border: "border-l-slate-500" },
+const META: Record<string, { label: string; desc: string; icon: string }> = {
+  missing_counterpart: { label: "Missing Counterpart", desc: "No matching payment or ledger record found in target dataset.", icon: "MISSING" },
+  amount_mismatch: { label: "Amount Mismatch", desc: "Monetary amount differs beyond defined tolerance threshold.", icon: "AMOUNT" },
+  duplicate_suspected: { label: "Suspected Duplicate", desc: "Multiple identical or overlapping records detected across runs.", icon: "DUPLICATE" },
+  date_out_of_tolerance: { label: "Date Gap Out of Tolerance", desc: "Date discrepancy exceeds configured window.", icon: "DATE" },
+  unresolved_ambiguous: { label: "Ambiguous Candidate Pair", desc: "Multiple candidate records with similar confidence scores.", icon: "AMBIGUOUS" },
+  low_confidence_llm: { label: "Low Confidence Link", desc: "Fallback matching model returned score below threshold.", icon: "LOW CONF" },
 };
 
 const ORDER = [
@@ -62,14 +62,14 @@ function group(exceptions: ExceptionRow[]): ExceptionGroup[] {
 
 function evidenceItems(evidence: Record<string, unknown>) {
   return [
-    { label: "Amount Match", value: evidence.amountMatch ? "Yes" : "No", ok: !!evidence.amountMatch },
-    { label: "Amount Diff", value: `₹${Number(evidence.amountDifference ?? 0).toFixed(2)}` },
-    { label: "Date Gap", value: `${evidence.dateDifference ?? "?"}d` },
-    { label: "Ref Match", value: evidence.referenceMatch ? "Yes" : "No", ok: !!evidence.referenceMatch },
-    { label: "Description", value: `${Math.round(Number(evidence.descriptionSimilarity ?? 0) * 100)}%` },
-    { label: "Fee Adj", value: evidence.feeAdjustmentFound ? "Yes" : "No", ok: !!evidence.feeAdjustmentFound },
-    { label: "Tax Adj", value: evidence.taxAdjustmentFound ? "Yes" : "No", ok: !!evidence.taxAdjustmentFound },
-    { label: "Counterparty", value: evidence.counterpartyMatch ? "Yes" : "No", ok: !!evidence.counterpartyMatch },
+    { label: "Amount Match", value: evidence.amountMatch ? "PASS" : "FAIL", ok: !!evidence.amountMatch },
+    { label: "Amount Difference", value: `$${Number(evidence.amountDifference ?? 0).toFixed(2)}` },
+    { label: "Date Gap", value: `${evidence.dateDifference ?? "?"} days` },
+    { label: "Ref Code Match", value: evidence.referenceMatch ? "PASS" : "FAIL", ok: !!evidence.referenceMatch },
+    { label: "Description Similarity", value: `${Math.round(Number(evidence.descriptionSimilarity ?? 0) * 100)}%` },
+    { label: "Fee Adjustment", value: evidence.feeAdjustmentFound ? "DETECTED" : "NONE", ok: !!evidence.feeAdjustmentFound },
+    { label: "Tax Adjustment", value: evidence.taxAdjustmentFound ? "DETECTED" : "NONE", ok: !!evidence.taxAdjustmentFound },
+    { label: "Counterparty Match", value: evidence.counterpartyMatch ? "MATCHED" : "UNMATCHED", ok: !!evidence.counterpartyMatch },
   ];
 }
 
@@ -79,9 +79,9 @@ function EvidenceGrid({ evidence }: { evidence: Record<string, unknown> }) {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
       {items.map((item) => (
-        <div key={item.label} className="rounded-2xl border border-white/5 bg-white/5 p-3">
-          <div className="text-[8px] font-bold uppercase tracking-[0.22em] text-slate-500">{item.label}</div>
-          <div className={`mt-1 text-sm font-bold ${item.ok === true ? "text-emerald-300" : item.ok === false ? "text-rose-300" : "text-slate-100"}`}>
+        <div key={item.label} className="rounded border border-[#1f2736] bg-[#0e121a] p-2.5">
+          <div className="text-[9px] font-semibold uppercase tracking-wider text-slate-400">{item.label}</div>
+          <div className={`mt-0.5 font-mono text-xs font-bold ${item.ok === true ? "text-emerald-400" : item.ok === false ? "text-rose-400" : "text-slate-200"}`}>
             {item.value}
           </div>
         </div>
@@ -94,22 +94,22 @@ function WhySection({ ai }: { ai: GroundedExplanation | null }) {
   if (!ai) return null;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 border-t border-[#1f2736] pt-3">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">Why</span>
-        <span className={`pill ${ai.certainty === "confirmed_fact" ? "pill-green" : ai.certainty === "likely_explanation" ? "pill-amber" : "pill-gray"}`}>
-          {ai.certainty.replace(/_/g, " ")}
+        <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400">ANALYSIS DIAGNOSTIC</span>
+        <span className={`pill ${ai.certainty === "confirmed_fact" ? "pill-green" : ai.certainty === "likely_explanation" ? "pill-amber" : "pill-slate"} text-[10px]`}>
+          {ai.certainty.replace(/_/g, " ").toUpperCase()}
         </span>
-        <span className="text-[10px] text-slate-400">{Math.round(ai.confidence * 100)}%</span>
+        <span className="text-xs text-slate-400">Confidence Score: {Math.round(ai.confidence * 100)}%</span>
       </div>
 
       {ai.possible_causes.length > 0 && (
         <div>
-          <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Possible causes</div>
-          <ul className="space-y-2">
+          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-400">IDENTIFIED CAUSES</div>
+          <ul className="space-y-1">
             {ai.possible_causes.map((cause, index) => (
-              <li key={index} className="flex items-start gap-2 text-sm text-slate-300">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-500" />
+              <li key={index} className="flex items-start gap-2 text-xs text-slate-300">
+                <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-slate-500" />
                 <span>{cause}</span>
               </li>
             ))}
@@ -118,9 +118,9 @@ function WhySection({ ai }: { ai: GroundedExplanation | null }) {
       )}
 
       {ai.recommended_action && (
-        <div className="rounded-2xl border border-emerald-400/15 bg-emerald-500/10 p-4">
-          <div className="text-[9px] font-bold uppercase tracking-[0.22em] text-emerald-300">Recommended Action</div>
-          <p className="mt-1 text-sm text-slate-200">{ai.recommended_action}</p>
+        <div className="rounded border border-blue-500/30 bg-[#172032] p-3">
+          <div className="text-[10px] font-bold uppercase tracking-wider text-blue-300">RECOMMENDED REMEDIATION</div>
+          <p className="mt-0.5 text-xs text-slate-200">{ai.recommended_action}</p>
         </div>
       )}
     </div>
@@ -161,7 +161,7 @@ function DetailPanel({ recordId, onClose }: { recordId: string; onClose: () => v
     setBusy(true);
     try {
       const response = await reviewException({ record_id: recordId, action });
-      setMessage(response.success ? `${action.replace(/_/g, " ").toLowerCase()} recorded` : "Action failed");
+      setMessage(response.success ? `Recorded: ${action.replace(/_/g, " ")}` : "Action failed");
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Action failed");
     } finally {
@@ -171,14 +171,14 @@ function DetailPanel({ recordId, onClose }: { recordId: string; onClose: () => v
 
   if (loading) {
     return (
-      <div className="rounded-2xl border border-white/5 bg-white/5 p-6 text-center text-sm text-slate-400 anim-breathe">
-        Loading explanation for {recordId}...
+      <div className="rounded border border-[#1f2736] bg-[#0e121a] p-4 text-center text-xs text-slate-400">
+        Loading evidence trace for record <span className="mono font-bold text-white">{recordId}</span>...
       </div>
     );
   }
 
   if (error) {
-    return <div className="rounded-2xl border border-rose-500/20 bg-rose-500/10 p-5 text-sm text-rose-200">{error}</div>;
+    return <div className="rounded border border-rose-500/30 bg-rose-950/20 p-4 text-xs text-rose-300">{error}</div>;
   }
 
   if (!data) return null;
@@ -187,24 +187,20 @@ function DetailPanel({ recordId, onClose }: { recordId: string; onClose: () => v
   const detailEntries = Object.entries(data.record_details).filter(([key]) => !["created_at", "id", "run_id"].includes(key));
 
   return (
-    <div className="surface space-y-4 p-5 anim-expand">
+    <div className="surface-subtle space-y-3 p-4">
       <div>
-        <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">What</div>
-        <p className="mt-1.5 text-sm leading-6 text-slate-200">{ai?.explanation ?? data.status}</p>
+        <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">SUMMARY EXPLANATION</div>
+        <p className="mt-1 text-xs leading-relaxed text-slate-200">{ai?.explanation ?? data.status}</p>
       </div>
 
       <div>
-        <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-emerald-300">Where</div>
-        <p className="mt-1.5 text-xs text-slate-400">
-          Record: <span className="mono font-bold text-slate-100">{data.record_id}</span>{" "}
-          <span className="text-slate-500">| {data.status}</span>
-        </p>
-        <div className="mt-3">
+        <div className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">STRUCTURED AUDIT EVIDENCE</div>
+        <div className="mt-2">
           <EvidenceGrid evidence={data.structured_evidence} />
         </div>
         {detailEntries.length > 0 && (
-          <div className="mt-3 overflow-x-auto rounded-2xl border border-white/5">
-            <table className="min-w-full text-[11px]">
+          <div className="mt-3 overflow-x-auto rounded border border-[#1f2736]">
+            <table className="min-w-full text-xs">
               <thead className="tbl-head">
                 <tr>
                   {detailEntries.map(([key]) => (
@@ -215,7 +211,7 @@ function DetailPanel({ recordId, onClose }: { recordId: string; onClose: () => v
               <tbody className="tbl-body">
                 <tr>
                   {detailEntries.map(([key, value]) => (
-                    <td key={key} className="mono max-w-[180px] truncate">
+                    <td key={key} className="mono max-w-[160px] truncate">
                       {value == null ? "—" : typeof value === "number" ? value.toLocaleString() : String(value)}
                     </td>
                   ))}
@@ -228,19 +224,19 @@ function DetailPanel({ recordId, onClose }: { recordId: string; onClose: () => v
 
       <WhySection ai={ai} />
 
-      <div className="flex flex-wrap gap-2 border-t border-white/5 pt-3">
-        <button disabled={busy || !!message} onClick={() => void handleReview("APPROVE_MATCH")} className="btn-green btn-xs">
-          Approve
+      <div className="flex flex-wrap items-center gap-2 border-t border-[#1f2736] pt-3">
+        <button disabled={busy || !!message} onClick={() => void handleReview("APPROVE_MATCH")} className="btn-primary btn-xs">
+          Approve Match
         </button>
         <button disabled={busy || !!message} onClick={() => void handleReview("REJECT_MATCH")} className="btn-red btn-xs">
-          Reject
+          Reject Match
         </button>
         <button disabled={busy || !!message} onClick={() => void handleReview("MARK_REVIEWED")} className="btn-outline btn-xs">
-          Reviewed
+          Mark Reviewed
         </button>
-        {message && <span className="flex items-center text-xs font-bold text-emerald-300">{message}</span>}
+        {message && <span className="text-xs font-semibold text-emerald-400">{message}</span>}
         <button onClick={onClose} className="btn-ghost btn-xs ml-auto">
-          Close
+          Close Panel
         </button>
       </div>
     </div>
@@ -258,37 +254,36 @@ function ExceptionCard({
   onToggle: () => void;
   onFocus: (id: string) => void;
 }) {
-  const meta = META[exception.reason_category] ?? { icon: "Item", border: "border-l-slate-500" };
+  const meta = META[exception.reason_category] ?? { icon: "DISCREPANCY" };
 
   return (
-    <div className={`rounded-3xl border ${meta.border} border-white/5 bg-white/5 transition-all duration-300 ${expanded ? "shadow-xl" : "hover:border-emerald-400/20"}`}>
+    <div className={`rounded-lg border border-[#1f2736] bg-[#131822] transition-colors ${expanded ? "border-blue-500/50" : "hover:border-[#2b364a]"}`}>
       <button onClick={onToggle} className="flex w-full items-start gap-3 p-4 text-left">
-        <span className="mt-0.5 rounded-2xl border border-white/5 bg-slate-950/60 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+        <span className="mono rounded bg-[#171e2b] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-300 border border-[#232d3f]">
           {meta.icon}
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
-            <button
-              className="mono text-sm font-bold text-white transition hover:text-emerald-300"
+            <span
+              className="mono text-xs font-bold text-white transition hover:text-blue-400 cursor-pointer"
               onClick={(event) => {
                 event.stopPropagation();
                 onFocus(exception.record_id);
               }}
             >
               {exception.source_type}:{exception.record_id}
-            </button>
-            <span className={`pill ${statusTone(exception.status)}`}>{exception.status.replace(/_/g, " ")}</span>
+            </span>
+            <span className={`pill ${statusTone(exception.status)} text-[10px]`}>{exception.status.replace(/_/g, " ")}</span>
           </div>
-          <p className="mt-1 text-sm text-slate-400 line-clamp-2">{exception.explanation}</p>
+          <p className="mt-1 text-xs text-slate-300 line-clamp-2">{exception.explanation}</p>
           {exception.best_candidate_id && (
-            <p className="mt-1 text-[10px] text-slate-500">
-              Best: <span className="mono">{exception.best_candidate_type}:{exception.best_candidate_id}</span>{" "}
+            <div className="mt-1 text-[11px] text-slate-400">
+              Suggested Match Candidate: <span className="mono text-slate-200">{exception.best_candidate_type}:{exception.best_candidate_id}</span>{" "}
               {exception.best_candidate_confidence != null ? `(${Math.round(exception.best_candidate_confidence * 100)}%)` : ""}
-            </p>
+            </div>
           )}
-          <p className="mt-1 text-[10px] text-slate-500 truncate">Action: {exception.suggested_action}</p>
         </div>
-        <svg className={`mt-1 h-4 w-4 shrink-0 text-slate-500 transition-transform duration-300 ${expanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+        <svg className={`mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform ${expanded ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
         </svg>
       </button>
@@ -314,12 +309,125 @@ function statusTone(status: string) {
   return map[status] ?? "pill-gray";
 }
 
+const GROUP_PAGE_SIZE = 10;
+
+type PageToken = number | "ellipsis";
+
+function buildTokens(current: number, total: number): PageToken[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const tokens: PageToken[] = [1];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(total - 1, current + 1);
+  if (start > 2) tokens.push("ellipsis");
+  for (let p = start; p <= end; p++) tokens.push(p);
+  if (end < total - 1) tokens.push("ellipsis");
+  tokens.push(total);
+  return tokens;
+}
+
+function GroupSection({
+  groupItem,
+  expandedId,
+  onToggle,
+  onFocus,
+}: {
+  groupItem: ExceptionGroup;
+  expandedId: string | null;
+  onToggle: (key: string) => void;
+  onFocus: (id: string) => void;
+}) {
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(groupItem.items.length / GROUP_PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * GROUP_PAGE_SIZE;
+  const visibleItems = groupItem.items.slice(start, start + GROUP_PAGE_SIZE);
+  const tokens = buildTokens(currentPage, totalPages);
+
+  return (
+    <div>
+      {/* Group Header */}
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <h3 className="section-title">{groupItem.label}</h3>
+          <span className="pill pill-slate text-[10px]">{groupItem.items.length} records</span>
+        </div>
+        {groupItem.items.length > GROUP_PAGE_SIZE && (
+          <span className="text-[11px] text-slate-400 mono">
+            {start + 1}–{Math.min(start + GROUP_PAGE_SIZE, groupItem.items.length)} of {groupItem.items.length}
+          </span>
+        )}
+      </div>
+      {groupItem.description && <p className="section-sub mb-3">{groupItem.description}</p>}
+
+      {/* Cards */}
+      <div className="space-y-2">
+        {visibleItems.map((exception) => {
+          const key = `${exception.source_type}:${exception.record_id}`;
+          return (
+            <ExceptionCard
+              key={key}
+              exception={exception}
+              expanded={expandedId === key}
+              onToggle={() => onToggle(key)}
+              onFocus={onFocus}
+            />
+          );
+        })}
+      </div>
+
+      {/* Pagination controls (only shown if more than one page) */}
+      {totalPages > 1 && (
+        <div className="mt-3 flex items-center justify-between border-t border-[#1f2736] pt-2">
+          <span className="text-[11px] text-slate-400">
+            Page <span className="mono font-semibold text-white">{currentPage}</span> of{" "}
+            <span className="mono font-semibold text-white">{totalPages}</span>
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              className="btn-outline btn-xs disabled:opacity-40"
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage <= 1}
+            >
+              ← Prev
+            </button>
+            {tokens.map((token, i) =>
+              token === "ellipsis" ? (
+                <span key={`el-${i}`} className="px-1 text-slate-500">…</span>
+              ) : (
+                <button
+                  key={token}
+                  onClick={() => setPage(token)}
+                  className={`btn-outline btn-xs min-w-7 ${
+                    token === currentPage ? "bg-[#1c2434] text-white border-amber-500/60 font-bold" : ""
+                  }`}
+                >
+                  {token}
+                </button>
+              )
+            )}
+            <button
+              className="btn-outline btn-xs disabled:opacity-40"
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage >= totalPages}
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function ErrorExplanation({ exceptions, onFocusRecord }: Props) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [category, setCategory] = useState("");
 
   const groups = useMemo(() => group(exceptions), [exceptions]);
-  const filteredGroups = useMemo(() => (category ? groups.filter((item) => item.category === category) : groups), [groups, category]);
+  const filteredGroups = useMemo(
+    () => (category ? groups.filter((item) => item.category === category) : groups),
+    [groups, category]
+  );
   const countsByCategory = useMemo(() => {
     const counts = new Map<string, number>();
     for (const exception of exceptions) {
@@ -328,23 +436,31 @@ export function ErrorExplanation({ exceptions, onFocusRecord }: Props) {
     return counts;
   }, [exceptions]);
 
+  function handleToggle(key: string) {
+    setExpandedId((current) => (current === key ? null : key));
+  }
+
   return (
     <div className="space-y-6">
-      <div className="hero-panel p-6 lg:p-8 anim-fade-up">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <div className="hero-kicker">Exception Resolution</div>
-            <h2 className="hero-title mt-4">What went wrong, where, and why</h2>
+      {/* Header Panel */}
+      <div className="hero-panel p-5 anim-fade-up">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="hero-kicker">EXCEPTION AUDIT &amp; RESOLUTION</div>
+            <h2 className="hero-title mt-1">Discrepancy Investigation &amp; Evidence Review</h2>
             <p className="hero-sub">
-              Each exception is explained with evidence, likely causes, and the next action so the approval flow stays
-              visible.
+              Evidence-backed exception records grouped by failure category. Click any item to inspect the full audit trail.
             </p>
           </div>
-          <span className="pill pill-red">{exceptions.length} exceptions</span>
+          <span className="pill pill-amber shrink-0">{exceptions.length} Open Exceptions</span>
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-2">
-          <button onClick={() => setCategory("")} className={`chip ${!category ? "chip-on" : ""}`}>
+        {/* Category Filter Chips */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button
+            onClick={() => setCategory("")}
+            className={`chip ${!category ? "chip-on" : ""}`}
+          >
             All ({exceptions.length})
           </button>
           {groups.map((groupItem) => (
@@ -353,44 +469,30 @@ export function ErrorExplanation({ exceptions, onFocusRecord }: Props) {
               onClick={() => setCategory(category === groupItem.category ? "" : groupItem.category)}
               className={`chip ${category === groupItem.category ? "chip-on" : ""}`}
             >
-              {META[groupItem.category]?.icon ?? "Item"} {groupItem.label} ({countsByCategory.get(groupItem.category) ?? 0})
+              {groupItem.label} ({countsByCategory.get(groupItem.category) ?? 0})
             </button>
           ))}
         </div>
       </div>
 
+      {/* Paginated Exception Groups */}
       {filteredGroups.map((groupItem, index) => (
-        <div key={groupItem.category} className="anim-fade-up" style={{ animationDelay: `${index * 70}ms` }}>
-          <div className="mb-3">
-            <div className="flex items-center gap-3">
-              <h3 className="section-title">
-                {META[groupItem.category]?.icon ?? "Item"} {groupItem.label}
-              </h3>
-              <span className="pill pill-slate">{groupItem.items.length} records</span>
-            </div>
-            {groupItem.description && <p className="section-sub">{groupItem.description}</p>}
-          </div>
-
-          <div className="space-y-3">
-            {groupItem.items.map((exception) => {
-              const key = `${exception.source_type}:${exception.record_id}`;
-              return (
-                <ExceptionCard
-                  key={key}
-                  exception={exception}
-                  expanded={expandedId === key}
-                  onToggle={() => setExpandedId((current) => (current === key ? null : key))}
-                  onFocus={onFocusRecord}
-                />
-              );
-            })}
-          </div>
+        <div key={groupItem.category} className="anim-fade-up" style={{ animationDelay: `${index * 40}ms` }}>
+          <GroupSection
+            groupItem={groupItem}
+            expandedId={expandedId}
+            onToggle={handleToggle}
+            onFocus={onFocusRecord}
+          />
         </div>
       ))}
 
       {filteredGroups.length === 0 && (
-        <div className="surface p-12 text-center text-sm text-slate-400">No exceptions in this category.</div>
+        <div className="surface p-8 text-center text-xs text-slate-400">
+          No open exceptions found in selected category.
+        </div>
       )}
     </div>
   );
 }
+

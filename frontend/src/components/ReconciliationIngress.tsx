@@ -2,145 +2,146 @@ import { useState } from "react";
 import type { UploadReconciliationFiles } from "../api";
 
 type Props = {
-  onUpload: (f: UploadReconciliationFiles) => Promise<void>;
-  onRunFromFolder: (dir: string) => Promise<void>;
-  busy: boolean;
+  onUpload: (files: UploadReconciliationFiles) => Promise<void>;
+  onRunFromFolder: (inputDir: string) => Promise<void>;
+  busy?: boolean;
 };
 
-export function ReconciliationIngress({ onUpload, onRunFromFolder, busy }: Props) {
-  const [bank, setBank] = useState<File | null>(null);
-  const [ledger, setLedger] = useState<File | null>(null);
-  const [invoices, setInvoices] = useState<File | null>(null);
-  const [bills, setBills] = useState<File | null>(null);
-  const [groundTruth, setGroundTruth] = useState<File | null>(null);
-  const [dir, setDir] = useState("input");
-  const [status, setStatus] = useState<string | null>(null);
+const FILE_TYPES: { key: keyof UploadReconciliationFiles; label: string; desc: string }[] = [
+  { key: "bankStatement", label: "Bank Statement CSV", desc: "Transactions & settlements" },
+  { key: "generalLedger", label: "General Ledger CSV", desc: "Internal ledger journal entries" },
+  { key: "invoices", label: "Accounts Receivable CSV", desc: "Customer invoices issued" },
+  { key: "bills", label: "Accounts Payable CSV", desc: "Vendor bills & obligations" },
+  { key: "groundTruth", label: "Ground Truth (Optional)", desc: "Benchmark verification pairings" },
+];
 
-  const canUpload = Boolean(bank && ledger && invoices && bills);
+export function ReconciliationIngress({ onUpload, onRunFromFolder, busy = false }: Props) {
+  const [mode, setMode] = useState<"files" | "folder">("files");
+  const [files, setFiles] = useState<Partial<UploadReconciliationFiles>>({});
+  const [folderPath, setFolderPath] = useState("input");
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
-  async function doUpload() {
-    if (!canUpload) {
-      setStatus("Select all four required files.");
+  function handleFileSelect(key: keyof UploadReconciliationFiles, file: File | null) {
+    setFiles((prev) => ({ ...prev, [key]: file ?? undefined }));
+  }
+
+  async function handleExecuteUpload() {
+    setUploadError(null);
+    if (!files.bankStatement || !files.generalLedger || !files.invoices || !files.bills) {
+      setUploadError("Bank Statement, General Ledger, Invoices and Bills files are required.");
       return;
     }
-
-    setStatus("Uploading...");
     try {
-      await onUpload({
-        bankStatement: bank!,
-        generalLedger: ledger!,
-        invoices: invoices!,
-        bills: bills!,
-        groundTruth,
-      });
-      setStatus("Done.");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Failed.");
+      await onUpload(files as UploadReconciliationFiles);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "File processing failed.");
     }
   }
 
-  async function doFolder() {
-    setStatus(`Running from ${dir}...`);
+  async function handleExecuteFolder() {
+    setUploadError(null);
     try {
-      await onRunFromFolder(dir.trim() || "input");
-      setStatus("Done.");
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Failed.");
+      await onRunFromFolder(folderPath);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Folder ingestion failed.");
     }
   }
 
-  const files = [
-    { key: "bank", label: "Bank Statement", file: bank, setFile: setBank, required: true },
-    { key: "ledger", label: "General Ledger", file: ledger, setFile: setLedger, required: true },
-    { key: "invoices", label: "Invoices (AR)", file: invoices, setFile: setInvoices, required: true },
-    { key: "bills", label: "Bills (AP)", file: bills, setFile: setBills, required: true },
-    { key: "groundTruth", label: "Ground Truth", file: groundTruth, setFile: setGroundTruth, required: false },
-  ];
+  const selectedCount = Object.values(files).filter(Boolean).length;
 
   return (
     <div className="surface p-5 anim-fade-up">
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-400/15 bg-gradient-to-br from-emerald-400/25 to-cyan-400/15">
-            <svg className="h-4 w-4 text-emerald-300" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-            </svg>
-          </div>
-          <div>
-            <div className="hero-kicker">Operational Ingress</div>
-            <h3 className="mt-2 text-sm font-bold text-white">Bring records into the command center</h3>
-          </div>
+      <div className="flex flex-col gap-2 border-b border-[#1f2736] pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="hero-kicker">DATA INGESTION</div>
+          <h3 className="section-title mt-1">Multi-Source Financial Data Ingress</h3>
+          <p className="section-sub">Upload CSV datasets or specify directory path to execute automated reconciliation.</p>
         </div>
-        <span className={`pill ${busy ? "pill-amber" : "pill-green"}`}>{busy ? "Running" : "Ready"}</span>
-      </div>
 
-      <div className="grid gap-4 xl:grid-cols-[1fr_0.92fr]">
-        <div className="agent-card">
-          <div className="section-head">
-            <div>
-              <div className="hero-kicker">File Upload</div>
-              <p className="section-sub">Upload bank, ledger, invoice, and bill data to populate the current run.</p>
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {files.map(({ key, label, file, setFile, required }) => (
-              <label key={key} className="block">
-                <span className="text-[11px] font-medium text-slate-300">
-                  {label}
-                  {!required && <span className="text-slate-500"> (optional)</span>}
-                </span>
-                <input
-                  type="file"
-                  accept=".json,.csv"
-                  onChange={(event) => setFile(event.target.files?.[0] ?? null)}
-                  disabled={busy}
-                  className="mt-1 block w-full rounded-2xl border border-white/5 bg-slate-950/80 px-3 py-2 text-[11px] text-slate-300 file:mr-2 file:rounded-xl file:border-0 file:bg-emerald-500 file:px-3 file:py-1.5 file:text-[10px] file:font-semibold file:text-slate-950 hover:file:bg-emerald-400 disabled:opacity-50"
-                />
-                {file && <div className="mt-1 text-[10px] text-emerald-300">{file.name}</div>}
-              </label>
-            ))}
-          </div>
-
-          <button disabled={busy || !canUpload} onClick={() => void doUpload()} className="btn-green mt-4 w-full disabled:opacity-50">
-            {busy ? "Running..." : "Run uploaded files"}
+        <div className="flex items-center gap-1 rounded bg-[#0e121a] p-1 border border-[#1f2736]">
+          <button
+            onClick={() => setMode("files")}
+            className={`btn-xs rounded font-medium ${mode === "files" ? "bg-[#1c2434] text-white font-bold" : "text-slate-400"}`}
+          >
+            File Upload Mode
+          </button>
+          <button
+            onClick={() => setMode("folder")}
+            className={`btn-xs rounded font-medium ${mode === "folder" ? "bg-[#1c2434] text-white font-bold" : "text-slate-400"}`}
+          >
+            Folder Mode
           </button>
         </div>
+      </div>
 
-        <div className="agent-card">
-          <div className="section-head">
-            <div>
-              <div className="hero-kicker">Folder Mode</div>
-              <p className="section-sub">Point the app at a folder and replay the same workflow without uploading files.</p>
-            </div>
+      {uploadError && <div className="mt-3 rounded border border-rose-500/30 bg-rose-950/20 p-3 text-xs text-rose-300">{uploadError}</div>}
+
+      {mode === "files" ? (
+        <div className="mt-4 space-y-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {FILE_TYPES.map(({ key, label, desc }) => {
+              const file = files[key];
+              return (
+                <div key={key} className="rounded-lg border border-[#1f2736] bg-[#0e121a] p-3 text-xs">
+                  <div className="flex items-center justify-between gap-1">
+                    <span className="font-semibold text-white">{label}</span>
+                    {file && <span className="pill pill-green text-[9px]">SELECTED</span>}
+                  </div>
+                  <p className="mt-0.5 text-[11px] text-slate-400">{desc}</p>
+                  <label className="mt-3 flex cursor-pointer items-center justify-between rounded border border-[#2b364a] bg-[#131822] px-2.5 py-1.5 hover:bg-[#171e2b]">
+                    <span className="truncate text-slate-300 font-mono text-[11px]">
+                      {file ? file.name : "Choose file..."}
+                    </span>
+                    <input
+                      type="file"
+                      accept=".csv"
+                      className="hidden"
+                      onChange={(e) => handleFileSelect(key, e.target.files?.[0] ?? null)}
+                    />
+                  </label>
+                </div>
+              );
+            })}
           </div>
 
-          <p className="mb-3 text-[11px] leading-5 text-slate-400">
-            Place <code className="mono rounded bg-slate-950/80 px-1 text-[10px]">bank_statement</code>,{" "}
-            <code className="mono rounded bg-slate-950/80 px-1 text-[10px]">general_ledger</code>,{" "}
-            <code className="mono rounded bg-slate-950/80 px-1 text-[10px]">invoices</code>, and{" "}
-            <code className="mono rounded bg-slate-950/80 px-1 text-[10px]">bills</code> in one folder.
-          </p>
-
-          <label className="block">
-            <span className="text-[11px] font-medium text-slate-300">Folder path</span>
+          <div className="flex items-center justify-between border-t border-[#1f2736] pt-3">
+            <span className="text-xs text-slate-400">
+              Selected <span className="mono font-bold text-white">{selectedCount}</span> files
+            </span>
+            <button
+              onClick={() => void handleExecuteUpload()}
+              disabled={busy || selectedCount === 0}
+              className="btn-primary"
+            >
+              {busy ? "Processing Ingestion..." : "Upload & Reconcile"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-4 space-y-4">
+          <div className="rounded-lg border border-[#1f2736] bg-[#0e121a] p-4 text-xs">
+            <div className="font-semibold text-white">Local Directory Path</div>
+            <p className="mt-0.5 text-slate-400">Target folder containing normalized CSV financial datasets.</p>
             <input
-              type="text"
-              value={dir}
-              onChange={(event) => setDir(event.target.value)}
-              disabled={busy}
-              className="field mt-1 mono text-[11px]"
-              placeholder="input"
+              value={folderPath}
+              onChange={(e) => setFolderPath(e.target.value)}
+              placeholder="e.g. input/ or data/run_01/"
+              className="field mt-3"
             />
-          </label>
+          </div>
 
-          <button disabled={busy} onClick={() => void doFolder()} className="btn-outline mt-4 w-full disabled:opacity-50">
-            {busy ? "Running..." : "Run folder reconciliation"}
-          </button>
+          <div className="flex items-center justify-between border-t border-[#1f2736] pt-3">
+            <span className="text-xs text-slate-400">Source directory: <span className="mono text-white">{folderPath}</span></span>
+            <button
+              onClick={() => void handleExecuteFolder()}
+              disabled={busy || !folderPath.trim()}
+              className="btn-primary"
+            >
+              {busy ? "Reading Folder..." : "Reconcile Folder"}
+            </button>
+          </div>
         </div>
-      </div>
-
-      {status && <p className={`mt-3 text-[11px] font-medium ${status.toLowerCase().includes("fail") ? "text-rose-300" : "text-slate-400"}`}>{status}</p>}
+      )}
     </div>
   );
 }

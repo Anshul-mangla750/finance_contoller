@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-from pydantic import Field
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     )
 
     app_name: str = "AI Finance Controller"
-    gemini_api_key: str | None = None
+    gemini_api_key: str | None = Field(default=None, validation_alias=AliasChoices("GEMINI_API_KEY", "GOOGLE_API_KEY"))
     database_path: Path = Field(default_factory=lambda: REPO_ROOT / "backend" / "app.db")
     generated_dir: Path = Field(default_factory=lambda: REPO_ROOT / "backend" / "generated")
     input_dir: Path = Field(default_factory=lambda: REPO_ROOT / "input")

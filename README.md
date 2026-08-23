@@ -42,6 +42,31 @@ cd backend
 uvicorn app.main:app --reload
 ```
 
+### Prompt-compliant settlement workflow
+
+The project now also includes a three-file settlement reconciliation flow that matches the build prompt more closely:
+
+- `settlement_report.csv`
+- `bank_statement.csv`
+- `order_ledger.csv`
+- optional `ground_truth.csv`
+
+Generate the synthetic demo batch:
+
+```bash
+cd backend
+reconcile --generate-sample
+```
+
+Run reconciliation on any three files in any order:
+
+```bash
+cd backend
+reconcile settlement_report.csv bank_statement.csv order_ledger.csv --tolerance-days 3 --output reconciliation_report.html
+```
+
+The CLI auto-detects the source role from the headers, writes a static HTML report, and includes evidence for both matches and exceptions.
+
 ### Gemini
 
 Copy `.env.example` to `.env` in the repo root, then set `GEMINI_API_KEY` there.
