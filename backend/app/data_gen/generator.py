@@ -372,14 +372,13 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         add_truth(bank_id, "bank", "ambiguous", [])
         add_truth(ledger_id, "ledger", "ambiguous", [])
 
-    # Invoice/bill generation linked to the 49 ledger records that should reconcile to bank records.
-    matched_ledger_records = [record for record in ledger_records if record["entry_id"] in matched_ledger_ids] + [
+    # Invoice/bill generation linked to ledger records that should reconcile to bank records.
+    all_ledger_records = [record for record in ledger_records if record["entry_id"] in matched_ledger_ids] + [
         record for record in ledger_records if record["entry_id"].startswith("LED-") and record["entry_id"] not in set(matched_ledger_ids)
     ]
-    # Only the first 49 ledgers are intentionally linked to AR/AP documents.
-    matched_ledger_records = matched_ledger_records[:49]
-    invoice_ledgers = matched_ledger_records[:15]
-    bill_ledgers = matched_ledger_records[15:27]
+    # Link the first 30 ledgers to invoices, next 30 to bills.
+    invoice_ledgers = all_ledger_records[:30]
+    bill_ledgers = all_ledger_records[30:60]
 
     for idx, ledger in enumerate(invoice_ledgers, start=1):
         invoice_id = next_invoice_id()
@@ -426,7 +425,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         add_truth(bill_id, "bill", "clean_match", [{"source_type": "ledger", "record_id": ledger["entry_id"]}])
 
     # Fill the remaining invoices and bills with legitimate orphans.
-    while len(invoices) < 20:
+    while len(invoices) < 60:
         invoice_id = next_invoice_id()
         issue_date = base_date + timedelta(days=180 + len(invoices))
         due_date = issue_date + timedelta(days=30)
@@ -443,7 +442,7 @@ def generate_bundle(seed: int | None = None) -> GeneratedBundle:
         )
         add_truth(invoice_id, "invoice", "orphan_ledger", [])
 
-    while len(bills) < 20:
+    while len(bills) < 60:
         bill_id = next_bill_id()
         issue_date = base_date + timedelta(days=180 + len(bills))
         due_date = issue_date + timedelta(days=30)
